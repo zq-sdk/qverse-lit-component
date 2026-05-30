@@ -1,0 +1,71 @@
+---
+description: samples 目录结构、测试页路由与新增流程
+globs: samples/**
+alwaysApply: false
+---
+
+# Samples 目录与测试结构
+
+> dev 服务器约定（禁止自动开浏览器）见同目录 `dev-server.mdc`。
+
+## 定位
+
+`samples/` 是 **Vue 3 + Vite + Element Plus** 独立应用，通过 `file:..` 引用父包 `@qverse/lit-components`。
+
+## 目录结构
+
+```
+samples/
+├── package.json              # @qverse/lit-components-samples
+├── vite.config.ts            # dev alias 父包 src；server.open: false
+├── index.html
+├── tsconfig*.json
+└── src/
+    ├── main.ts               # 挂载 App + router + Element Plus
+    ├── App.vue               # 布局 + 顶部 el-menu 导航 + RouterView
+    ├── router/index.ts       # 路由表
+    ├── views/                # ★ 测试页面（按组件分层）
+    │   ├── BaseComponentsView.vue
+    │   └── CommonComponentsView.vue
+    ├── plugins/
+    │   ├── element-plus.ts   # EP 全局注册
+    │   └── lit-components.ts # import '@qverse/lit-components'
+    └── types/lit-components.d.ts  # lit-* 的 Vue 模板类型
+```
+
+**约定**
+
+- 测试页面放 `src/views/`，**不要**放 `src/components/`
+- 路由定义集中在 `src/router/index.ts`
+- Lit 注册集中在 `plugins/lit-components.ts`（全量入口即可）
+- `lit-*` 在 `vite.config.ts` 标为自定义元素；类型放 `types/lit-components.d.ts`
+
+## 测试页路由
+
+主页面 `App.vue` 用 **Element Plus 水平菜单 + Vue Router** 切换两类测试页：
+
+| 路由 | 菜单 | 视图 | 对应库入口 | 被测组件 |
+|------|------|------|------------|----------|
+| `/` | — | redirect → `/base` | — | — |
+| `/base` | 基础组件测试 | `BaseComponentsView.vue` | `/base` | `lit-button`（variant / size / block / 事件） |
+| `/common` | 通用组件测试 | `CommonComponentsView.vue` | `/common` | `lit-switch-panorama-view`、`lit-switch-dollhouse-view`、`lit-switch-floorplan-view` |
+
+## 新增测试页
+
+1. 在 `src/views/` 新增 `XxxComponentsView.vue`
+2. 在 `router/index.ts` 注册路由（path 与组件库分层一致，如 `/base`、`/common`）
+3. 在 `App.vue` 的 `el-menu-item` 增加菜单项
+4. 在 `types/lit-components.d.ts` 补充新 `lit-*` 类型
+
+## dev / build
+
+- `npm run dev`：alias `@qverse/lit-components` → 父目录 `src/`（改组件后硬刷新）
+- `npm run build`：消费父目录 `dist/`（与业务项目一致）
+
+```bash
+cd samples
+npm run dev       # http://localhost:3100
+npm run build     # samples/dist
+```
+
+根目录快捷：`npm run sample:dev` / `npm run sample:build`

@@ -1,0 +1,89 @@
+---
+description: 项目架构与组件库结构
+alwaysApply: true
+---
+
+# 架构设计
+
+## 仓库总览
+
+本仓库 = **Lit 组件库（根目录）** + **Vue 3 演示应用（samples/）**，各自独立 `package.json`，可分别构建。
+
+```
+Qverse-Lit-Component/
+├── src/                    # 组件库源码
+├── dist/                   # 组件库构建产物（npm 发布/引用）
+├── theme/                  # 设计令牌 tokens.json + 生成 CSS
+├── scripts/                # generate-theme.mjs
+├── samples/                # Vue 3 演示（独立应用，细则见 .cursor/rules/samples/）
+├── package.json            # @qverse/lit-components
+└── vite.config.ts          # 组件库 lib 构建
+```
+
+## 组件库结构
+
+```
+src/
+├── index.ts                      # 包入口，re-export components
+├── components/
+│   ├── index.ts                  # 全量注册 base + common
+│   ├── base/                     # 基础组件
+│   │   ├── index.ts
+│   │   └── lit-button.ts         # lit-button
+│   └── common/                   # 通用/组合组件（细则见 common-components.mdc）
+│       ├── index.ts              # 聚合入口、LIT_COMMON_TAGS
+│       ├── lit-switch-panorama-view/
+│       ├── lit-switch-dollhouse-view/
+│       └── lit-switch-floorplan-view/
+├── styles/                       # tokens.ts + tokens.generated.ts
+└── utils/define-lit-element.ts   # safeCustomElement
+```
+
+**common 单组件目录**（各 `lit-switch-*-view/` 结构相同）：
+
+```
+lit-switch-<view>-view/
+├── index.ts          # LitElement 类 + @safeCustomElement 注册
+├── constants.ts      # TAG、VIEW、事件名、CSS 变量名
+├── properties.ts     # 属性转换器（如 booleanAttr）
+├── styles.ts         # Shadow DOM 样式
+├── template.ts       # render 模板
+├── interaction.ts    # 点击交互编排
+├── events.ts         # CustomEvent 派发
+├── logic.ts          # qspace.view.turnTo* 等业务逻辑
+└── assets/           # 图标等资源
+```
+
+文件头、职责分层、样式约定与新增 checklist 见 `.cursor/rules/common-components.mdc`。
+
+| 包入口 | 组件 |
+|--------|------|
+| `@qverse/lit-components/base` | `lit-button` |
+| `@qverse/lit-components/common` | `lit-switch-panorama-view`、`lit-switch-dollhouse-view`、`lit-switch-floorplan-view` |
+| `@qverse/lit-components` | 全部 |
+
+新增组件：基础放 `base/`，组合/业务放 `common/`；更新各层 `index.ts` 与 `LIT_*_TAGS`。
+
+## samples 相关规则
+
+`samples/` 的目录结构、测试页路由、dev 服务器约定见：
+
+```
+.cursor/rules/
+  architecture.mdc           # 仓库总览（alwaysApply）
+  common-components.mdc      # common 目录结构、文件头、分层（globs: src/components/common/**）
+  samples/
+    test-pages.mdc           # 目录结构、路由/视图、新增测试页
+    dev-server.mdc           # 禁止 dev 自动打开浏览器
+```
+
+## 命令
+
+```bash
+# 组件库
+npm run build              # dist + 类型声明
+
+# samples（细则见 .cursor/rules/samples/）
+npm run sample:dev
+npm run sample:build
+```

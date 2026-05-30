@@ -1,0 +1,33 @@
+---
+description: samples 开发服务器不得自动打开浏览器
+globs: samples/**
+alwaysApply: false
+---
+
+# Samples 开发服务器
+
+> 目录与测试页结构见 `test-pages.mdc`（同目录）。
+
+## 禁止自动打开浏览器
+
+`samples/` 运行 `npm run dev` 或等价 Vite 开发命令时，**不得**自动打开 Web 浏览器。
+
+### Vite 配置
+
+`samples/vite.config.ts` 中 `server.open` 必须为 `false`（或省略，默认即为 false）：
+
+```typescript
+server: {
+  open: false,
+}
+```
+
+### 禁止项
+
+- 不要在 `vite.config.ts` 设置 `server.open: true`
+- 不要在 `package.json` 的 `dev` 脚本中添加 `--open` 或 `--open true`
+- 不要用 `open-cli`、`opener` 等脚本在 dev 启动后自动拉起浏览器
+
+### 访问方式
+
+开发时在终端查看 Vite 输出的 Local URL，手动打开即可（默认 `http://localhost:3100`）。

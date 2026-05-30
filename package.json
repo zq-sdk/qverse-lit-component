@@ -1,0 +1,55 @@
+{
+  "name": "@qverse/lit-components",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Lit Web Components（components/base + components/common）",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./components": {
+      "types": "./dist/components/index.d.ts",
+      "import": "./dist/components/index.js"
+    },
+    "./base": {
+      "types": "./dist/components/base/index.d.ts",
+      "import": "./dist/components/base/index.js"
+    },
+    "./common": {
+      "types": "./dist/components/common/index.d.ts",
+      "import": "./dist/components/common/index.js"
+    },
+    "./theme.css": {
+      "import": "./theme/generated/element-plus-vars.css",
+      "default": "./theme/generated/element-plus-vars.css"
+    }
+  },
+  "files": [
+    "dist",
+    "theme/tokens.json",
+    "theme/generated"
+  ],
+  "scripts": {
+    "generate-theme": "node scripts/generate-theme.mjs",
+    "dev": "npm run generate-theme && vite build --watch",
+    "build": "npm run generate-theme && vite build && tsc -p tsconfig.build.json",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm run build",
+    "sample:dev": "npm run dev --prefix samples",
+    "sample:build": "npm run build --prefix samples"
+  },
+  "peerDependencies": {
+    "element-plus": "^2.14.0",
+    "lit": "^3.2.0"
+  },
+  "devDependencies": {
+    "element-plus": "^2.14.0",
+    "lit": "^3.2.1",
+    "typescript": "^5.7.3",
+    "vite": "^6.0.7"
+  }
+}

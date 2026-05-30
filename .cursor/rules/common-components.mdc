@@ -1,0 +1,97 @@
+---
+description: common 通用组件目录结构、文件头与分层约定
+globs: src/components/common/**
+alwaysApply: false
+---
+
+# Common 通用组件规范
+
+## 文件头（必须）
+
+`src/components/common/` 下每个 **`.ts` 文件**顶部须包含：
+
+```ts
+/*
+ * @Author: ncz
+ * @Date: YYYY-MM-DD
+ * @Description: <组件名> <文件职责>
+ */
+```
+
+| 字段 | 要求 |
+|------|------|
+| `@Author` | 固定 `ncz` |
+| `@Date` | 创建或重大变更日期 |
+| `@Description` | 简明中文，说明本文件职责 |
+
+示例见 `lit-switch-dollhouse-view/constants.ts`。
+
+## 目录结构
+
+每个通用组件为 **独立子目录**（kebab-case，与自定义元素标签一致）：
+
+```
+src/components/common/
+├── index.ts                          # common 聚合入口、LIT_COMMON_TAGS
+└── lit-switch-<view>-view/           # 例：lit-switch-dollhouse-view
+    ├── index.ts                      # LitElement 类 + @safeCustomElement 注册
+    ├── constants.ts                  # TAG、VIEW、事件名、CSS 变量名
+    ├── properties.ts                 # 属性转换器（如 booleanAttr）
+    ├── styles.ts                     # Shadow DOM 样式（export styles）
+    ├── template.ts                   # render 模板（export renderXxxView）
+    ├── interaction.ts                # 点击交互编排（校验 → 事件 → logic）
+    ├── events.ts                     # CustomEvent 派发
+    ├── logic.ts                      # qspace.view.turnTo* 等业务逻辑
+    └── assets/                       # 图标等资源（如 icon.png）
+```
+
+`common/index.ts` 只做 side-effect import 各组件 `index.ts` 并 re-export。
+
+## 文件职责
+
+| 文件 | 职责 | 禁止 |
+|------|------|------|
+| `index.ts` | 属性声明、`static styles`、`render()`、注册 | 不写复杂业务逻辑 |
+| `constants.ts` | 标签名、视图名、事件名常量 | 不写运行时逻辑 |
+| `properties.ts` | Lit 属性 converter | 不写 UI |
+| `styles.ts` | `css` 样式；图标用 `assets/*?url` + `background-image` | 不写 TS 逻辑 |
+| `template.ts` | `html` 模板 | 不写 qspace 调用 |
+| `interaction.ts` | 点击流程：禁用校验 → events → logic | 不直接写样式 |
+| `events.ts` | `dispatchEvent` 封装 | 不调用 qspace |
+| `logic.ts` | qspace 视图切换 | 不操作 DOM |
+
+## 样式约定（视图切换类）
+
+对齐作品编辑端 ModeSwitch：
+
+- 模板：`<div class="mode-item ${VIEW}">`（如 `.mode-item.dollhouse`）
+- 图标：`background-image: var(--lit-mode-xxx-icon, url(...))`
+- 默认资源：`assets/icon.png` 经 Vite `?url` 引入
+- 宿主可覆盖 CSS 变量，例如 `url('/static/image/common/dollhouse-btn.png')`
+- `active` 为 true 时 `:host { display: none }`（当前视图隐藏按钮）
+
+## 属性与事件
+
+| 属性 | 说明 |
+|------|------|
+| `:qspace` | qspace 实例（attribute: false） |
+| `button-enabled` | 是否可点击 |
+| `active` | 当前视图，为 true 时隐藏 |
+| `switching` | 切换中，禁用交互 |
+
+事件命名：`lit-switch-<view>-click` / `lit-switch-<view>-complete`。
+
+## 新增通用组件 checklist
+
+1. 在 `common/` 下新建 `lit-xxx/` 目录，按上表补齐 8 个 TS 文件 + `assets/`
+2. 每个 TS 文件补全文件头（`@Author: ncz`）
+3. 在 `common/index.ts` 注册 import / export，更新 `LIT_COMMON_TAGS`
+4. 在 `src/components/index.ts` 更新 `LIT_ALL_TAGS`
+5. 在 `samples/src/types/lit-components.d.ts` 补充 Vue 类型
+6. 在 `samples/src/views/CommonComponentsView.vue` 增加演示（如需）
+
+## 禁止
+
+- 不要在 `common/` 根目录放单文件组件（除 `index.ts`）
+- 不要新增跨组件 shared 基类文件（各组件目录自包含）
+- 不要用 `mode-switch-container`（容器由宿主布局负责）
