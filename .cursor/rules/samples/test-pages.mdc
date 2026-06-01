@@ -59,7 +59,11 @@ samples/
 
 ## dev / build
 
-- `npm run dev`：alias `@qverse/lit-components` → 父目录 `src/`（改组件后硬刷新）
+- `npm run dev`：alias 映射（改组件后硬刷新）：
+  - `@qverse/lit-components` → `../src/index.ts`
+  - `@qverse/lit-components/base` → `../src/components/base/index.ts`
+  - `@qverse/lit-components/common` → `../src/components/common/index.ts`
+  - `@qverse/lit-components/theme.css` → `../theme/generated/element-plus-vars.css`
 - `npm run build`：消费父目录 `dist/`（与业务项目一致）
 
 ```bash

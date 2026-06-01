@@ -1,7 +1,10 @@
 {
-  "name": "@qverse/lit-components",
+  "name": "@qverse-ui/lit-components",
   "version": "1.0.0",
-  "private": true,
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "Lit Web Components（components/base + components/common）",
   "type": "module",
   "main": "./dist/index.js",
@@ -10,10 +13,6 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
-    },
-    "./components": {
-      "types": "./dist/components/index.d.ts",
-      "import": "./dist/components/index.js"
     },
     "./base": {
       "types": "./dist/components/base/index.d.ts",

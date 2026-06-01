@@ -24,16 +24,20 @@ export default defineConfig(({ mode }) => ({
       ...(mode === 'development'
         ? [
             {
-
-              find: /^@qverse\/lit-components$/,
-              replacement: `${litPkgRoot}/src/index.ts`,
-
+              find: /^@qverse\/lit-components\/theme\.css$/,
+              replacement: `${litPkgRoot}/theme/generated/element-plus-vars.css`,
             },
             {
-
-              find: /^@qverse\/lit-components\/(.+)$/,
-              replacement: `${litPkgRoot}/src/$1`,
-
+              find: /^@qverse\/lit-components\/base$/,
+              replacement: `${litPkgRoot}/src/components/base/index.ts`,
+            },
+            {
+              find: /^@qverse\/lit-components\/common$/,
+              replacement: `${litPkgRoot}/src/components/common/index.ts`,
+            },
+            {
+              find: /^@qverse\/lit-components$/,
+              replacement: `${litPkgRoot}/src/index.ts`,
             },
           ]
         : []),
