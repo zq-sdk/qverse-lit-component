@@ -25,7 +25,7 @@ type LitPanoramaSwitchOption = {
 
 type LitSwitchViewProps = {
 
-  buttonEnabled?: boolean
+  enabled?: boolean
   qspace?: unknown
   option?: LitPanoramaSwitchOption | null
   onLitSwitchPanoramaClick?: (e: CustomEvent<{ view?: string }>) => void

@@ -11,17 +11,36 @@ import { turnToDollhouseView } from './logic.js'
 export type DollhouseViewHost = HTMLElement & {
 
   qspace: any
-  buttonEnabled: boolean
-  setSwitching: (value: boolean) => void
-  isSwitching: () => boolean
-  setCurrentView: (value: boolean) => void
-  isCurrentView: () => boolean
+  enabled: boolean
+  setEnabled: (value: boolean) => void
+
+}
+
+/** 根据 qspace.view.mode 同步 enabled：当前视图或过渡中不可点 */
+export function syncEnabledFromMode(host: DollhouseViewHost, mode: string | undefined) {
+
+  switch (mode) {
+
+    case ViewMode.Transitioning:
+    case ViewMode.Dollhouse:
+      host.setEnabled(false)
+      break
+
+    case ViewMode.Floorplan:
+    case ViewMode.Panorama:
+      host.setEnabled(true)
+      break
+
+    default:
+      break
+
+  }
 
 }
 
 export function handleDollhouseClick(host: DollhouseViewHost, e: Event) {
 
-  if (!host.buttonEnabled || host.isSwitching() || host.isCurrentView()) {
+  if (!host.enabled) {
 
     e.preventDefault()
     e.stopPropagation()
@@ -38,46 +57,24 @@ export function handleDollhouseClick(host: DollhouseViewHost, e: Event) {
 
   }
 
-  host.setSwitching(true)
+  host.setEnabled(false)
 
   turnToDollhouseView(host.qspace, () => {
 
     dispatchComplete(host, e)
 
-    host.setSwitching(false)
-    host.setCurrentView(true)
-
   })
+
+}
+
+export function handelCoreLoaded(host: DollhouseViewHost) {
+
+  syncEnabledFromMode(host, host.qspace?.view?.mode)
 
 }
 
 export function handelViewModeChange(host: DollhouseViewHost, mode: string) {
 
-  // console.log('on mode change', mode);
-
-  switch (mode) {
-
-    case ViewMode.Transitioning:
-      host.setSwitching(true)
-      break
-
-    case ViewMode.Dollhouse:
-      host.setSwitching(false)
-      host.setCurrentView(true)
-      break
-
-    case ViewMode.Floorplan:
-      host.setSwitching(false)
-      host.setCurrentView(false)
-      break
-
-    case ViewMode.Panorama:
-      host.setSwitching(false)
-      host.setCurrentView(false)
-      break
-
-    default:
-      break
-  }
+  syncEnabledFromMode(host, mode)
 
 }

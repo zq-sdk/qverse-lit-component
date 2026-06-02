@@ -27,16 +27,12 @@ export const styles = css`
     background-image: var(--lit-mode-dollhouse-icon, url(${unsafeCSS(iconUrl)}));
   }
 
-  :host(:not([button-enabled])),
-  :host([switching]),
-  :host([current-view]) {
+  :host(:not([enabled])) {
     pointer-events: none;
     opacity: 0.5;
   }
 
-  :host(:not([button-enabled])) .mode-item,
-  :host([switching]) .mode-item,
-  :host([current-view]) .mode-item {
+  :host(:not([enabled])) .mode-item {
     cursor: not-allowed;
   }
 `

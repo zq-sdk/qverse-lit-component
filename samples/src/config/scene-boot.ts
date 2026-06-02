@@ -7,9 +7,11 @@ export const SCENE_BOOT_DATA = {
   id: 'b25cf01c_a3v5_b6f9',
   version: '2023-01-11-17-10-03',
   entry_info: {
-    mode: 'dollhouse',
+    // mode: 'panorama',
+    // mode: 'dollhouse',
+    mode: 'floorplan',
     rotation: null,
-    point: 'location_02',
+    // point: 'location_01',
   },
   tile_render_config: {
     mode: 'lod',

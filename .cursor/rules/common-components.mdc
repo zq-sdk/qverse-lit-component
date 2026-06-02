@@ -76,9 +76,7 @@ src/components/common/
 | 属性 | 说明 |
 |------|------|
 | `:qspace` | qspace 实例（attribute: false） |
-| `button-enabled` | 是否可点击（场景就绪后由宿主开启） |
-
-`switching` 为组件内部状态：点击后调用 qspace 前自动禁用，切换 complete 后自动恢复；宿主无需传入。
+| `enabled` | 是否可点击；组件监听 `core.loaded` / `mode.change` 自动同步（当前视图与过渡中禁用），宿主亦可覆盖 |
 
 事件命名：`lit-switch-<view>-click` / `lit-switch-<view>-complete`。
 

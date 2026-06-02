@@ -24,16 +24,10 @@ alwaysApply: false
 ### 正确示例（`index.ts` 片段）
 
 ```ts
-  setSwitching(value: boolean) {
+  setEnabled(value: boolean) {
 
-    this._switching = value
-    this.toggleAttribute('switching', value)
-
-  }
-
-  isSwitching() {
-
-    return this._switching
+    this.enabled = value
+    this.toggleAttribute('enabled', value)
 
   }
 ```
@@ -41,12 +35,12 @@ alwaysApply: false
 ### 错误示例
 
 ```ts
-  setSwitching(value: boolean) {
+  setEnabled(value: boolean) {
 
 
-    this._switching = value
+    this.enabled = value
 
-    this.toggleAttribute('switching', value)
+    this.toggleAttribute('enabled', value)
 
 
   }
@@ -68,9 +62,9 @@ alwaysApply: false
 |------|------|------|
 | 自定义元素 / 目录 | kebab-case | `lit-switch-dollhouse-view` |
 | TS 类 | PascalCase | `LitSwitchDollhouseView` |
-| 属性（Lit） | camelCase | `buttonEnabled` → attribute `button-enabled` |
+| 属性（Lit） | camelCase | `enabled` → attribute `enabled` |
 | 常量 | UPPER_SNAKE 或 camelCase 导出 | `TAG`、`CLICK_EVENT` |
-| 内部状态 | `@state()` + `_` 前缀 | `_switching` |
+| 内部方法 | camelCase | `setEnabled` |
 | 事件名 | kebab-case 字符串 | `lit-switch-dollhouse-click` |
 
 ## TypeScript / Lit

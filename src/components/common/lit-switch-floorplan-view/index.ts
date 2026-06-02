@@ -5,10 +5,10 @@
  */
 
 import { LitElement, PropertyValues } from 'lit'
-import { property, state } from 'lit/decorators.js'
+import { property } from 'lit/decorators.js'
 import { safeCustomElement } from '../../../utils/define-lit-element.js'
 import { TAG } from './constants.js'
-import { handleFloorplanClick, handelViewModeChange } from './interaction.js'
+import { handleFloorplanClick, handelViewModeChange, handelCoreLoaded } from './interaction.js'
 import { booleanAttr } from './properties.js'
 import { styles } from './styles.js'
 import { renderFloorplanView } from './template.js'
@@ -22,48 +22,22 @@ export class LitSwitchFloorplanView extends LitElement {
   qspace: any = null
 
   /**
-   * 是否允许点击；默认 false，场景就绪后由宿主设为 true
-   * HTML: button-enabled / Vue: :button-enabled
+   * 是否可点击；由 core.loaded / mode.change 自动同步，宿主亦可覆盖
+   * HTML: enabled / Vue: :enabled
    */
   @property({
     type: Boolean,
-    attribute: 'button-enabled',
+    attribute: 'enabled',
     reflect: true,
     converter: booleanAttr,
   })
-  buttonEnabled = false
+  enabled = false
 
-  /** 切换进行中（内部状态）；调用 qspace 前禁用，complete 后恢复 */
-  @state()
-  private _switching = false
+  setEnabled(value: boolean) {
 
-  /** 切换完成后禁用当前按钮，避免重复切换 */
-  @state()
-  private _isCurrentView = false
+    this.enabled = value
 
-  setSwitching(value: boolean) {
-
-    this._switching = value
-    this.toggleAttribute('switching', value)
-
-  }
-
-  isSwitching() {
-
-    return this._switching
-
-  }
-
-  setCurrentView(value: boolean) {
-
-    this._isCurrentView = value
-    this.toggleAttribute('current-view', value)
-
-  }
-
-  isCurrentView() {
-
-    return this._isCurrentView
+    this.toggleAttribute('enabled', value)
 
   }
 
@@ -72,6 +46,12 @@ export class LitSwitchFloorplanView extends LitElement {
   private _onClick = (e: Event) => {
 
     handleFloorplanClick(this, e)
+
+  }
+
+  private _onCoreLoaded = () => {
+
+    handelCoreLoaded(this);
 
   }
 
@@ -95,11 +75,15 @@ export class LitSwitchFloorplanView extends LitElement {
    */
   connectedCallback() {
 
-    // console.log('connectedCallback', this);
-
-    this.qspace.view.addEventListener('mode.change', this._onViewModeChange);
-
     super.connectedCallback()
+
+    if (this.qspace) {
+
+      this.qspace.core.addEventListener('loaded', this._onCoreLoaded);
+
+      this.qspace.view.addEventListener('mode.change', this._onViewModeChange);
+
+    }
 
   }
 
@@ -108,12 +92,13 @@ export class LitSwitchFloorplanView extends LitElement {
    */
   disconnectedCallback() {
 
-    // console.log('disconnectedCallback', this);
+    if (this.qspace) {
 
-    this.setSwitching(false)
-    this.setCurrentView(false)
+      this.qspace.core.removeEventListener('loaded', this._onCoreLoaded);
 
-    this.qspace.view.removeEventListener('mode.change', this._onViewModeChange);
+      this.qspace.view.removeEventListener('mode.change', this._onViewModeChange);
+
+    }
 
     super.disconnectedCallback()
 
@@ -124,8 +109,6 @@ export class LitSwitchFloorplanView extends LitElement {
    */
   firstUpdated(changed: Map<string, unknown>) {
 
-    // console.log('firstUpdated', this, changed);
-
     super.firstUpdated(changed)
 
   }
@@ -135,8 +118,6 @@ export class LitSwitchFloorplanView extends LitElement {
    */
   updated(changed: Map<string, unknown>) {
 
-    // console.log('updated', this, changed);
-
     super.updated(changed)
 
   }
@@ -145,8 +126,6 @@ export class LitSwitchFloorplanView extends LitElement {
    * 将要更新
    */
   protected willUpdate(_changedProperties: PropertyValues): void {
-
-    // console.log('willUpdate', this, _changedProperties);
 
   }
 
