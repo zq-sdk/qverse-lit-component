@@ -12,13 +12,27 @@
       </template>
 
       <p class="section-label">视图切换（需场景加载完成后可用）</p>
-      <div class="switch-row">
-        <lit-switch-dollhouse-view :qspace="qspaceInstance" />
-        <lit-switch-floorplan-view :qspace="qspaceInstance" />
-        <lit-switch-panorama-view
-          :qspace="qspaceInstance"
-          :option="panoramaOption"
-        />
+      <div class="switch-panel">
+        <el-checkbox-group v-model="visibleSwitchViews" class="switch-checkbox-row">
+          <el-checkbox label="dollhouse">3D视图</el-checkbox>
+          <el-checkbox label="floorplan">平面视图</el-checkbox>
+          <el-checkbox label="panorama">全景视图</el-checkbox>
+        </el-checkbox-group>
+        <div class="switch-btn-row">
+          <lit-switch-dollhouse-view
+            v-if="visibleSwitchViews.includes('dollhouse')"
+            :qspace="qspaceInstance"
+          />
+          <lit-switch-floorplan-view
+            v-if="visibleSwitchViews.includes('floorplan')"
+            :qspace="qspaceInstance"
+          />
+          <lit-switch-panorama-view
+            v-if="visibleSwitchViews.includes('panorama')"
+            :qspace="qspaceInstance"
+            :option="panoramaOption"
+          />
+        </div>
       </div>
     </el-card>
 
@@ -51,6 +65,8 @@ import type { PanoramaSwitchOption } from '@/composables/useSwitchView'
 import { resolveQspace } from '@/sdk/resolve-qspace'
 import { attachRendererStage, detachRendererStage } from '@/utils/renderer-stage-host.js'
 
+type SwitchViewMode = 'dollhouse' | 'floorplan' | 'panorama'
+
 /** 场景加载进度与启动 */
 const { loadState, loadProgress, startScene } = useQspaceScene()
 
@@ -58,6 +74,9 @@ const { loadState, loadProgress, startScene } = useQspaceScene()
 const qspaceInstance: any = resolveQspace()
 
 const panoramaOption = ref<PanoramaSwitchOption | null>(null)
+
+/** 勾选的视图类型；默认全部勾选 */
+const visibleSwitchViews = ref<SwitchViewMode[]>(['dollhouse', 'floorplan', 'panorama'])
 
 const sceneModelLabel = computed(
   () => `${SCENE_BOOT_DATA.id} · ${SCENE_BOOT_DATA.version}`,
@@ -130,11 +149,25 @@ onBeforeUnmount(() => {
   color: var(--el-text-color-secondary);
 }
 
-.switch-row {
+.switch-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.switch-checkbox-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 1.5rem;
+  align-items: center;
+}
+
+.switch-btn-row {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
   align-items: center;
+  min-height: 26px;
 }
 
 .renderer-wrap {

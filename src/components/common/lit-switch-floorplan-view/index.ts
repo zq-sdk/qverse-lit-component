@@ -8,7 +8,7 @@ import { LitElement, PropertyValues } from 'lit'
 import { property } from 'lit/decorators.js'
 import { safeCustomElement } from '../../../utils/define-lit-element.js'
 import { TAG } from './constants.js'
-import { handleFloorplanClick, handelViewModeChange, handelCoreLoaded } from './interaction.js'
+import { handleFloorplanClick, handelViewModeChange, handelCoreLoaded, syncEnabledFromMode } from './interaction.js'
 import { booleanAttr } from './properties.js'
 import { styles } from './styles.js'
 import { renderFloorplanView } from './template.js'
@@ -78,6 +78,21 @@ export class LitSwitchFloorplanView extends LitElement {
     super.connectedCallback()
 
     if (this.qspace) {
+
+      if (this.qspace.view) {
+
+        // 待优化
+        try {
+
+          syncEnabledFromMode(this, this.qspace.view.mode);
+
+        } catch (error) {
+
+          console.error(error);
+
+        }
+
+      }
 
       this.qspace.core.addEventListener('loaded', this._onCoreLoaded);
 
