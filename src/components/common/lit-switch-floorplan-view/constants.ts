@@ -10,6 +10,6 @@ export const VIEW = 'floorplan' as const
 
 export const ICON_CSS_VAR = '--lit-mode-floorplan-icon' as const
 
-export const CLICK_EVENT = 'lit-switch-floorplan-click' as const
+export const CLICK_EVENT = 'lit-click' as const
 
-export const COMPLETE_EVENT = 'lit-switch-floorplan-complete' as const
+export const COMPLETE_EVENT = 'lit-switch-complete' as const

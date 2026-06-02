@@ -14,23 +14,33 @@
       <p class="section-label">视图切换（需场景加载完成后可用）</p>
       <div class="switch-panel">
         <el-checkbox-group v-model="visibleSwitchViews" class="switch-checkbox-row">
-          <el-checkbox label="dollhouse">3D视图</el-checkbox>
-          <el-checkbox label="floorplan">平面视图</el-checkbox>
-          <el-checkbox label="panorama">全景视图</el-checkbox>
+          <el-checkbox value="dollhouse">3D视图</el-checkbox>
+          <el-checkbox value="floorplan">平面视图</el-checkbox>
+          <el-checkbox value="panorama">全景视图</el-checkbox>
         </el-checkbox-group>
         <div class="switch-btn-row">
           <lit-switch-dollhouse-view
-            v-if="visibleSwitchViews.includes('dollhouse')"
+            ref="litSwitchDollhouseViewRef"
             :qspace="qspaceInstance"
+            @lit-click="onSwitchDollhouseViewClick"
+            @lit-switch-complete="onSwitchDollhouseViewComplete"
+            v-if="visibleSwitchViews.includes('dollhouse')"
           />
           <lit-switch-floorplan-view
-            v-if="visibleSwitchViews.includes('floorplan')"
+            ref="litSwitchFloorplanViewRef"
             :qspace="qspaceInstance"
+            @lit-click="onSwitchFloorplanViewClick"
+            @lit-switch-complete="onSwitchFloorplanViewComplete"
+            v-if="visibleSwitchViews.includes('floorplan')"
           />
           <lit-switch-panorama-view
-            v-if="visibleSwitchViews.includes('panorama')"
+            ref="litSwitchPanoramaViewRef"
             :qspace="qspaceInstance"
             :option="panoramaOption"
+            @lit-click="onSwitchPanoramaViewClick"
+            @lit-switch-complete="onSwitchPanoramaViewComplete"
+            @click.stop="onSwitchPanoramaViewClick2"
+            v-if="visibleSwitchViews.includes('panorama')"
           />
         </div>
       </div>
@@ -73,7 +83,15 @@ const { loadState, loadProgress, startScene } = useQspaceScene()
 /** 全局 qspace 实例（由 index.html 注入） */
 const qspaceInstance: any = resolveQspace()
 
-const panoramaOption = ref<PanoramaSwitchOption | null>(null)
+/** 全景视图切换参数 */
+const panoramaOption = ref<PanoramaSwitchOption>({})
+
+const litSwitchPanoramaViewRef = ref<any>(null)
+const litSwitchFloorplanViewRef = ref<any>(null)
+const litSwitchDollhouseViewRef = ref<any>(null)
+;(window as any).litSwitchPanoramaViewRef = litSwitchPanoramaViewRef
+;(window as any).litSwitchFloorplanViewRef = litSwitchFloorplanViewRef
+;(window as any).litSwitchDollhouseViewRef = litSwitchDollhouseViewRef
 
 /** 勾选的视图类型；默认全部勾选 */
 const visibleSwitchViews = ref<SwitchViewMode[]>(['dollhouse', 'floorplan', 'panorama'])
@@ -87,26 +105,93 @@ const rendererWrapRef = ref<HTMLElement | null>(null)
 /** core loaded：初始化 panorama option */
 function onCoreLoaded() {
 
-  panoramaOption.value = {
-    locationId: qspaceInstance.model.waypoints[0].location_id,
+
+}
+
+/** 3D 视图切换点击事件 */
+function onSwitchDollhouseViewClick(e: CustomEvent<{ view?: string }>) {
+
+  console.log('onSwitchDollhouseViewClick', e);
+
+}
+
+/** 平面视图切换点击事件 */
+function onSwitchFloorplanViewClick(e: CustomEvent<{ view?: string }>) {
+
+  console.log('onSwitchFloorplanViewClick', e);
+
+}
+
+/** 全景视图切换点击事件 */
+function onSwitchPanoramaViewClick(e: CustomEvent<{ view?: string }>) {
+
+  console.log('onSwitchPanoramaViewClick', e);
+
+  // 直接改参数
+  // panoramaOption!.value!.locationId = 'location_10'
+
+  // panoramaOption!.value!.quaternion = {
+  //   x: -0.0009091443452219972,
+  //   y: -0.7159943957430044,
+  //   z: -0.0009324420121733712,
+  //   w: 0.6981048125267894,
+  // }
+
+  // 通过 ref 直接修改 option
+  litSwitchPanoramaViewRef.value.option.locationId = 'location_10'
+
+  litSwitchPanoramaViewRef.value.option.quaternion = {
+    x: -0.0009091443452219972,
+    y: -0.7159943957430044,
+    z: -0.0009324420121733712,
+    w: 0.6981048125267894,
   }
 
-  const timer = setTimeout(() => {
+  console.log('litSwitchPanoramaViewRef.value.option', litSwitchPanoramaViewRef.value.option);
 
-    clearTimeout(timer)
+}
 
-    panoramaOption!.value!.locationId = 'location_10'
+/**
+ * Vue 点击事件
+ * 测试直接修改 option 是否生效
+ * 时机是否正确
+ * 结论：lit事件先于 vue 事件执行，这里修改 option 后，lit 内部的点击事件无法获取 option
+ */
+function onSwitchPanoramaViewClick2(e: Event) {
 
-    panoramaOption!.value!.quaternion = {
-      x: -0.0009091443452219972,
-      y: -0.7159943957430044,
-      z: -0.0009324420121733712,
-      w: 0.6981048125267894,
-    }
+  console.log('onSwitchPanoramaViewClick2', e);
 
-    console.log('locationId updated', panoramaOption.value)
+  // litSwitchPanoramaViewRef.value.option.locationId = 'location_10'
 
-  }, 3000)
+  // litSwitchPanoramaViewRef.value.option.quaternion = {
+  //   x: -0.0009091443452219972,
+  //   y: -0.7159943957430044,
+  //   z: -0.0009324420121733712,
+  //   w: 0.6981048125267894,
+  // }
+
+  // console.log('litSwitchPanoramaViewRef.value.option', litSwitchPanoramaViewRef.value.option);
+
+}
+
+/** 全景视图切换完成事件 */
+function onSwitchPanoramaViewComplete(e: CustomEvent<{ view?: string }>) {
+
+  console.log('onSwitchPanoramaViewComplete', e);
+
+}
+
+/** 3D 视图切换完成事件 */
+function onSwitchDollhouseViewComplete(e: CustomEvent<{ view?: string }>) {
+
+  console.log('onSwitchDollhouseViewComplete', e);
+
+}
+
+/** 平面视图切换完成事件 */
+function onSwitchFloorplanViewComplete(e: CustomEvent<{ view?: string }>) {
+
+  console.log('onSwitchFloorplanViewComplete', e);
 
 }
 

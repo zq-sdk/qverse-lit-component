@@ -65,7 +65,7 @@ alwaysApply: false
 | 属性（Lit） | camelCase | `enabled` → attribute `enabled` |
 | 常量 | UPPER_SNAKE 或 camelCase 导出 | `TAG`、`CLICK_EVENT` |
 | 内部方法 | camelCase | `setEnabled` |
-| 事件名 | kebab-case 字符串 | `lit-switch-dollhouse-click` |
+| 事件名 | kebab-case 字符串 | `lit-click` / `lit-switch-complete` |
 
 ## TypeScript / Lit
 

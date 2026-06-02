@@ -12,6 +12,6 @@ export const VIEW = ViewMode.Dollhouse as const
 
 export const ICON_CSS_VAR = '--lit-mode-dollhouse-icon' as const
 
-export const CLICK_EVENT = 'lit-switch-dollhouse-click' as const
+export const CLICK_EVENT = 'lit-click' as const
 
-export const COMPLETE_EVENT = 'lit-switch-dollhouse-complete' as const
+export const COMPLETE_EVENT = 'lit-switch-complete' as const

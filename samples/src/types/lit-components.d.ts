@@ -23,21 +23,26 @@ type LitPanoramaSwitchOption = {
 
 }
 
-type LitSwitchViewProps = {
+type LitSwitchViewEventDetail = {
 
-  enabled?: boolean
-  qspace?: unknown
-  option?: LitPanoramaSwitchOption | null
-  onLitSwitchPanoramaClick?: (e: CustomEvent<{ view?: string }>) => void
-  onLitSwitchPanoramaComplete?: (e: CustomEvent<{ view?: string }>) => void
-  onLitSwitchDollhouseClick?: (e: CustomEvent<{ view?: string }>) => void
-  onLitSwitchDollhouseComplete?: (e: CustomEvent<{ view?: string }>) => void
-  onLitSwitchFloorplanClick?: (e: CustomEvent<{ view?: string }>) => void
-  onLitSwitchFloorplanComplete?: (e: CustomEvent<{ view?: string }>) => void
+  view?: string
 
 }
 
-type LitSwitchDollhouseFloorplanProps = Omit<LitSwitchViewProps, 'option'>
+type LitSwitchViewBaseProps = {
+
+  enabled?: boolean
+  qspace?: unknown
+  onLitClick?: (e: CustomEvent<LitSwitchViewEventDetail>) => void
+  onLitSwitchComplete?: (e: CustomEvent<LitSwitchViewEventDetail>) => void
+
+}
+
+type LitSwitchViewProps = LitSwitchViewBaseProps & {
+
+  option?: LitPanoramaSwitchOption | null
+
+}
 
 declare module 'vue' {
 
@@ -45,8 +50,8 @@ declare module 'vue' {
 
     'lit-button': DefineComponent<LitButtonProps>
     'lit-switch-panorama-view': DefineComponent<LitSwitchViewProps>
-    'lit-switch-dollhouse-view': DefineComponent<LitSwitchDollhouseFloorplanProps>
-    'lit-switch-floorplan-view': DefineComponent<LitSwitchDollhouseFloorplanProps>
+    'lit-switch-dollhouse-view': DefineComponent<LitSwitchViewBaseProps>
+    'lit-switch-floorplan-view': DefineComponent<LitSwitchViewBaseProps>
 
   }
 

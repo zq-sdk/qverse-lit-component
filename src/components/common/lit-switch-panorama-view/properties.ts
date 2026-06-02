@@ -4,6 +4,7 @@
  * @Description: lit-switch-panorama-view 属性转换器与类型
  */
 
+/** 切换全景视图四元数；由宿主通过 :option 传入 */
 export type PanoramaSwitchQuaternion = {
 
   x: number
@@ -21,6 +22,7 @@ export type PanoramaSwitchOption = {
 
 }
 
+/** 布尔属性转换器 */
 export const booleanAttr = {
   fromAttribute(value: string | null): boolean {
 

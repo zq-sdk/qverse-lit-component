@@ -62,6 +62,8 @@ export function handlePanoramaClick(host: PanoramaViewHost, e: Event) {
 
   host.setEnabled(false)
 
+  console.log('host.option', host.option);
+
   turnToPanoramaView(host.qspace, host.option, () => {
 
     dispatchComplete(host, e)

@@ -78,7 +78,7 @@ src/components/common/
 | `:qspace` | qspace 实例（attribute: false） |
 | `enabled` | 是否可点击；组件监听 `core.loaded` / `mode.change` 自动同步（当前视图与过渡中禁用），宿主亦可覆盖 |
 
-事件命名：`lit-switch-<view>-click` / `lit-switch-<view>-complete`。
+事件命名：`lit-click` / `lit-switch-complete`（各视图切换组件统一；`detail.view` 区分视图类型）。
 
 ## 新增通用组件 checklist
 

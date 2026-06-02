@@ -18,7 +18,10 @@ import { renderPanoramaView } from './template.js'
 export class LitSwitchPanoramaView extends LitElement {
 
   /** qspace SDK 实例；仅 JS 属性绑定，不映射 HTML attribute（对象无法序列化） */
-  @property({ attribute: false })
+  @property({
+    type: Object,
+    attribute: false
+  })
   qspace: any = null
 
   /**
@@ -26,10 +29,10 @@ export class LitSwitchPanoramaView extends LitElement {
    * HTML: enabled / Vue: :enabled
    */
   @property({
-    type: Boolean,
-    attribute: 'enabled',
-    reflect: true,
-    converter: booleanAttr,
+    type: Boolean, // 属性类型
+    attribute: 'enabled', // HTML attribute
+    reflect: true, // 反射属性到 HTML attribute
+    converter: booleanAttr, // 布尔属性转换器
   })
   enabled = false
 
@@ -37,8 +40,11 @@ export class LitSwitchPanoramaView extends LitElement {
    * 切换全景视图参数；仅 JS 属性绑定
    * Vue: :option="{ locationId, quaternion }"
    */
-  @property({ attribute: false })
-  option: PanoramaSwitchOption | null = null
+  @property({
+    type: Object,
+    attribute: false
+  })
+  option: PanoramaSwitchOption = {}
 
   setEnabled(value: boolean) {
 
