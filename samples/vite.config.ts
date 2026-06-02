@@ -4,8 +4,32 @@ import { fileURLToPath, URL } from 'node:url'
 
 const samplesRoot = fileURLToPath(new URL('.', import.meta.url))
 const litPkgRoot = fileURLToPath(new URL('..', import.meta.url))
+const litDistRoot = `${litPkgRoot}/dist`
 
-export default defineConfig(({ mode }) => ({
+/** 监听组件库 dist 变更并触发 samples 整页刷新（file:.. 链接包默认不在 watch 范围内） */
+function watchLitPackageDist() {
+
+  return {
+    name: 'watch-lit-package-dist',
+    configureServer(server: { watcher: { add: (p: string) => void; on: (e: string, cb: (p: string) => void) => void }; ws: { send: (payload: unknown) => void } }) {
+
+      server.watcher.add(litDistRoot)
+      server.watcher.on('change', (file) => {
+
+        if (file.startsWith(litDistRoot)) {
+
+          server.ws.send({ type: 'full-reload' })
+
+        }
+
+      })
+
+    },
+  }
+
+}
+
+export default defineConfig({
 
   plugins: [
     vue({
@@ -17,37 +41,19 @@ export default defineConfig(({ mode }) => ({
         },
       },
     }),
+    watchLitPackageDist(),
   ],
   resolve: {
 
-    alias: [
-      ...(mode === 'development'
-        ? [
-            {
-              find: /^@qverse\/lit-components\/theme\.css$/,
-              replacement: `${litPkgRoot}/theme/generated/element-plus-vars.css`,
-            },
-            {
-              find: /^@qverse\/lit-components\/base$/,
-              replacement: `${litPkgRoot}/src/components/base/index.ts`,
-            },
-            {
-              find: /^@qverse\/lit-components\/common$/,
-              replacement: `${litPkgRoot}/src/components/common/index.ts`,
-            },
-            {
-              find: /^@qverse\/lit-components$/,
-              replacement: `${litPkgRoot}/src/index.ts`,
-            },
-          ]
-        : []),
-      {
+    alias: {
+      '@': `${samplesRoot}/src`,
+    },
 
-        find: /^@\//,
-        replacement: `${samplesRoot}/src/`,
+  },
+  optimizeDeps: {
 
-      },
-    ],
+    /** 避免预构建缓存 file:.. 链接包，dist 更新后仍用旧产物 */
+    exclude: ['@qverse-ui/lit-components'],
 
   },
   server: {
@@ -61,12 +67,13 @@ export default defineConfig(({ mode }) => ({
       allow: [samplesRoot, litPkgRoot],
 
     },
+    watch: {
+
+      /** file:.. 在 node_modules 内，默认被忽略；显式纳入监听 */
+      ignored: ['!**/node_modules/@qverse-ui/lit-components/dist/**'],
+
+    },
 
   },
-  optimizeDeps: {
 
-    exclude: ['@qverse/lit-components'],
-
-  },
-
-}))
+})

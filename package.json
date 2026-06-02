@@ -1,6 +1,6 @@
 {
   "name": "@qverse-ui/lit-components",
-  "version": "1.0.0",
+  "version": "1.0.4",
   "private": false,
   "publishConfig": {
     "access": "public"

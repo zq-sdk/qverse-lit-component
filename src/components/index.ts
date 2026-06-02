@@ -1,5 +1,5 @@
 /**
- * @qverse/lit-components — 组件聚合入口
+ * @qverse-ui/lit-components — 组件聚合入口
  */
 import './base/index.js'
 import './common/index.js'

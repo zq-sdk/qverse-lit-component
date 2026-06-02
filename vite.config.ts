@@ -4,6 +4,11 @@ import { resolve } from 'node:path'
 const src = (p: string) => resolve(__dirname, p)
 
 export default defineConfig({
+  resolve: {
+    alias: {
+      '@': src('src'),
+    },
+  },
   build: {
     lib: {
       entry: {

@@ -1,8 +1,25 @@
 /*
  * @Author: ncz
  * @Date: 2026-05-30
- * @Description: lit-switch-panorama-view 属性转换器
+ * @Description: lit-switch-panorama-view 属性转换器与类型
  */
+
+export type PanoramaSwitchQuaternion = {
+
+  x: number
+  y: number
+  z: number
+  w: number
+
+}
+
+/** 切换全景视图参数；由宿主通过 :option 传入 */
+export type PanoramaSwitchOption = {
+
+  locationId?: string
+  quaternion?: PanoramaSwitchQuaternion
+
+}
 
 export const booleanAttr = {
   fromAttribute(value: string | null): boolean {

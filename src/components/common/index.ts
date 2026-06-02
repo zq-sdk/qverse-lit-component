@@ -1,7 +1,7 @@
 /*
  * @Author: ncz
  * @Date: 2026-05-30
- * @Description: @qverse/lit-components/common 聚合入口与导出
+ * @Description: @qverse-ui/lit-components/common 聚合入口与导出
  */
 
 import './lit-switch-panorama-view/index.js'

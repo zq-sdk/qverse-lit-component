@@ -12,10 +12,6 @@ export const styles = css`
     display: inline-block;
   }
 
-  :host([active]) {
-    display: none;
-  }
-
   .mode-item {
     box-sizing: border-box;
     width: 26px;
@@ -32,13 +28,15 @@ export const styles = css`
   }
 
   :host(:not([button-enabled])),
-  :host([switching]) {
+  :host([switching]),
+  :host([current-view]) {
     pointer-events: none;
     opacity: 0.5;
   }
 
   :host(:not([button-enabled])) .mode-item,
-  :host([switching]) .mode-item {
+  :host([switching]) .mode-item,
+  :host([current-view]) .mode-item {
     cursor: not-allowed;
   }
 `

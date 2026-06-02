@@ -1,0 +1,102 @@
+---
+description: 组件库与 samples 源码格式、命名与 TS 书写规范
+globs: src/**,samples/src/**
+alwaysApply: false
+---
+
+# 代码样式与规范
+
+## 空行（重要）
+
+**禁止「一行代码一行空行」**（不得在每个语句、import、字段之间插入空行）。
+
+| 位置 | 规则 |
+|------|------|
+| 文件头 `*/` 之后 | **1** 行空行，再写 import |
+| import 块与后续代码 | **1** 行空行 |
+| 相邻 import | **不要**空行分隔 |
+| 类/接口成员之间 | **1** 行空行（属性、方法块之间） |
+| 方法体 `{` 与 `}` | `{` 后 **1** 行空行；`}` 前 **1** 行空行 |
+| 方法之间 | **1** 行空行 |
+| 连续逻辑语句 | **不要**空行（如 `this.a = x` 与下一行赋值） |
+| 文件末尾 | 最多 **1** 行尾换行，**不要**连续多个空行 |
+
+### 正确示例（`index.ts` 片段）
+
+```ts
+  setSwitching(value: boolean) {
+
+    this._switching = value
+    this.toggleAttribute('switching', value)
+
+  }
+
+  isSwitching() {
+
+    return this._switching
+
+  }
+```
+
+### 错误示例
+
+```ts
+  setSwitching(value: boolean) {
+
+
+    this._switching = value
+
+    this.toggleAttribute('switching', value)
+
+
+  }
+```
+
+参考：`src/components/common/lit-switch-floorplan-view/index.ts`、`interaction.ts`。
+
+## 文件头
+
+| 范围 | 文件头 |
+|------|--------|
+| `src/components/common/**/*.ts` | **必须** `@Author: ncz` 块（见 `common-components.mdc`） |
+| `src/components/base/` | 可选；新文件建议与 common 一致 |
+| `samples/src/**/*.ts` | 可选；复杂模块可加简短 `@Description` |
+
+## 命名
+
+| 类型 | 约定 | 示例 |
+|------|------|------|
+| 自定义元素 / 目录 | kebab-case | `lit-switch-dollhouse-view` |
+| TS 类 | PascalCase | `LitSwitchDollhouseView` |
+| 属性（Lit） | camelCase | `buttonEnabled` → attribute `button-enabled` |
+| 常量 | UPPER_SNAKE 或 camelCase 导出 | `TAG`、`CLICK_EVENT` |
+| 内部状态 | `@state()` + `_` 前缀 | `_switching` |
+| 事件名 | kebab-case 字符串 | `lit-switch-dollhouse-click` |
+
+## TypeScript / Lit
+
+- 相对 import **带 `.js` 后缀**（ESM 构建）：`from './constants.js'`
+- 组件注册统一 `@safeCustomElement(TAG)`，禁止裸 `customElements.define`
+- 对外 API 用 `@property`；组件内部临时状态用 `@state()`，**不**作为对外 attribute
+- 对象引用（如 `qspace`）用 `@property({ attribute: false })`
+- 布尔 HTML attribute 复用 `properties.ts` 的 `booleanAttr` converter
+- 复杂交互放 `interaction.ts`，`index.ts` 只做属性声明与 `render()` 委托
+- 避免 `any` 扩散；qspace 等外部 SDK 可在边界处用 `any`，内部尽量收窄
+
+## CSS（`styles.ts`）
+
+- 使用 Lit `css`  tagged template；图标 `import url from './assets/icon.png?url'`
+- Shadow 内样式；宿主覆盖用 CSS 变量（`--lit-mode-*-icon`）
+- 选择器与作品编辑端 ModeSwitch 对齐（`.mode-item.<view>`）
+
+## 注释
+
+- 代码应自解释；**仅**对非 obvious 的业务/边界写 JSDoc（属性含义、attribute 映射、内部状态职责）
+- 不写「翻译代码」的废话注释
+- 禁止遗留 `console.log` 调试（samples 演示逻辑除外且应克制）
+
+## 禁止
+
+- 不要 reformat 整个文件为「每行后空一行」
+- 不要在 `common/` 根目录增加 shared 基类（各组件目录自包含）
+- 不要为省事复制粘贴后留双倍空行或重复 import

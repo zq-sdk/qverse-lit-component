@@ -2,7 +2,7 @@
   <el-card shadow="never" class="lit-demo">
     <template #header>
       <span>基础组件测试</span>
-      <el-text type="info" size="small">lit-button · @qverse/lit-components/base</el-text>
+      <el-text type="info" size="small">lit-button · @qverse-ui/lit-components/base</el-text>
     </template>
 
     <el-text type="info" class="intro">

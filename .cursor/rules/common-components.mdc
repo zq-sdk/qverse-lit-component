@@ -24,7 +24,9 @@ alwaysApply: false
 | `@Date` | 创建或重大变更日期 |
 | `@Description` | 简明中文，说明本文件职责 |
 
-示例见 `lit-switch-dollhouse-view/constants.ts`。
+示例见 `lit-switch-floorplan-view/index.ts`、`lit-switch-dollhouse-view/interaction.ts`。
+
+格式细则（空行、命名、Lit 写法）见 `.cursor/rules/code-style.mdc`。
 
 ## 目录结构
 
@@ -68,16 +70,15 @@ src/components/common/
 - 图标：`background-image: var(--lit-mode-xxx-icon, url(...))`
 - 默认资源：`assets/icon.png` 经 Vite `?url` 引入
 - 宿主可覆盖 CSS 变量，例如 `url('/static/image/common/dollhouse-btn.png')`
-- `active` 为 true 时 `:host { display: none }`（当前视图隐藏按钮）
 
 ## 属性与事件
 
 | 属性 | 说明 |
 |------|------|
 | `:qspace` | qspace 实例（attribute: false） |
-| `button-enabled` | 是否可点击 |
-| `active` | 当前视图，为 true 时隐藏 |
-| `switching` | 切换中，禁用交互 |
+| `button-enabled` | 是否可点击（场景就绪后由宿主开启） |
+
+`switching` 为组件内部状态：点击后调用 qspace 前自动禁用，切换 complete 后自动恢复；宿主无需传入。
 
 事件命名：`lit-switch-<view>-click` / `lit-switch-<view>-complete`。
 

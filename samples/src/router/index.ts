@@ -8,7 +8,6 @@ const router = createRouter({
 
       path: '/',
       redirect: '/base',
-
     },
     {
 
@@ -16,7 +15,6 @@ const router = createRouter({
       name: 'base',
       component: () => import('@/views/BaseComponentsView.vue'),
       meta: { title: '基础组件测试' },
-
     },
     {
 
@@ -24,7 +22,6 @@ const router = createRouter({
       name: 'common',
       component: () => import('@/views/CommonComponentsView.vue'),
       meta: { title: '通用组件测试' },
-
     },
   ],
 

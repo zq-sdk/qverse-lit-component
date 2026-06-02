@@ -16,7 +16,7 @@ Qverse-Lit-Component/
 ├── theme/                  # 设计令牌 tokens.json + 生成 CSS
 ├── scripts/                # generate-theme.mjs
 ├── samples/                # Vue 3 演示（独立应用，细则见 .cursor/rules/samples/）
-├── package.json            # @qverse/lit-components
+├── package.json            # @qverse-ui/lit-components
 └── vite.config.ts          # 组件库 lib 构建
 ```
 
@@ -58,9 +58,9 @@ lit-switch-<view>-view/
 
 | 包入口 | 组件 |
 |--------|------|
-| `@qverse/lit-components/base` | `lit-button` |
-| `@qverse/lit-components/common` | `lit-switch-panorama-view`、`lit-switch-dollhouse-view`、`lit-switch-floorplan-view` |
-| `@qverse/lit-components` | 全部 |
+| `@qverse-ui/lit-components/base` | `lit-button` |
+| `@qverse-ui/lit-components/common` | `lit-switch-panorama-view`、`lit-switch-dollhouse-view`、`lit-switch-floorplan-view` |
+| `@qverse-ui/lit-components` | 全部 |
 
 新增组件：基础放 `base/`，组合/业务放 `common/`；更新各层 `index.ts` 与 `LIT_*_TAGS`。
 
@@ -71,6 +71,7 @@ lit-switch-<view>-view/
 ```
 .cursor/rules/
   architecture.mdc           # 仓库总览（alwaysApply）
+  code-style.mdc             # 空行、命名、TS/Lit 书写（globs: src/**, samples/src/**）
   common-components.mdc      # common 目录结构、文件头、分层（globs: src/components/common/**）
   samples/
     test-pages.mdc           # 目录结构、路由/视图、新增测试页

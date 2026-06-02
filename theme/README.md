@@ -9,7 +9,7 @@
 仅在希望「主应用 / 子应用 / Lit 共用同一套 `--el-*` 变量」时，在对应应用里**自行**添加（在 `element-plus/dist/index.css` 之后）：
 
 ```ts
-import '@qverse/lit-components/theme.css'
+import '@qverse-ui/lit-components/theme.css'
 ```
 
 ## 修改本包默认 fallback
@@ -26,5 +26,5 @@ npm run build
 
 | 文件 | 用途 |
 |------|------|
-| `theme/generated/element-plus-vars.css` | 可选：覆盖 `:root` 的 `--el-*`（`@qverse/lit-components/theme.css`） |
+| `theme/generated/element-plus-vars.css` | 可选：覆盖 `:root` 的 `--el-*`（`@qverse-ui/lit-components/theme.css`） |
 | `src/styles/tokens.generated.ts` | Lit 组件 Shadow DOM 内 `--lit-*` |

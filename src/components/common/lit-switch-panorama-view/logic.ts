@@ -4,13 +4,27 @@
  * @Description: lit-switch-panorama-view qspace 视图切换逻辑
  */
 
-export function turnToPanoramaView(qspace: any, complete: () => void) {
+import type { PanoramaSwitchOption } from './properties.js'
 
-  const locationId = qspace.model?.waypoints?.[0]?.location_id
+export function turnToPanoramaView(
+  qspace: any,
+  option: PanoramaSwitchOption | null,
+  complete: () => void,
+) {
 
-  qspace.view.turnToPanorama({
+  const locationId = option?.locationId;
+
+  const params: Record<string, unknown> = {
     location_id: locationId,
     complete,
-  })
+  }
+
+  if (option?.quaternion) {
+
+    params.quaternion = option.quaternion
+
+  }
+
+  qspace.view.turnToPanorama(params)
 
 }

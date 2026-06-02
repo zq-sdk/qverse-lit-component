@@ -10,13 +10,13 @@ alwaysApply: false
 
 ## 定位
 
-`samples/` 是 **Vue 3 + Vite + Element Plus** 独立应用，通过 `file:..` 引用父包 `@qverse/lit-components`。
+`samples/` 是 **Vue 3 + Vite + Element Plus** 独立应用，通过 `file:..` 引用父包 `@qverse-ui/lit-components`。
 
 ## 目录结构
 
 ```
 samples/
-├── package.json              # @qverse/lit-components-samples
+├── package.json              # @qverse-ui/lit-components-samples
 ├── vite.config.ts            # dev alias 父包 src；server.open: false
 ├── index.html
 ├── tsconfig*.json
@@ -29,7 +29,7 @@ samples/
     │   └── CommonComponentsView.vue
     ├── plugins/
     │   ├── element-plus.ts   # EP 全局注册
-    │   └── lit-components.ts # import '@qverse/lit-components'
+    │   └── lit-components.ts # import '@qverse-ui/lit-components'
     └── types/lit-components.d.ts  # lit-* 的 Vue 模板类型
 ```
 
@@ -60,10 +60,10 @@ samples/
 ## dev / build
 
 - `npm run dev`：alias 映射（改组件后硬刷新）：
-  - `@qverse/lit-components` → `../src/index.ts`
-  - `@qverse/lit-components/base` → `../src/components/base/index.ts`
-  - `@qverse/lit-components/common` → `../src/components/common/index.ts`
-  - `@qverse/lit-components/theme.css` → `../theme/generated/element-plus-vars.css`
+  - `@qverse-ui/lit-components` → `../src/index.ts`
+  - `@qverse-ui/lit-components/base` → `../src/components/base/index.ts`
+  - `@qverse-ui/lit-components/common` → `../src/components/common/index.ts`
+  - `@qverse-ui/lit-components/theme.css` → `../theme/generated/element-plus-vars.css`
 - `npm run build`：消费父目录 `dist/`（与业务项目一致）
 
 ```bash

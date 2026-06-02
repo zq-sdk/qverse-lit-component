@@ -2,7 +2,7 @@
   <el-container class="layout">
     <el-header class="header">
       <div class="header-brand">
-        <h1>@qverse/lit-components</h1>
+        <h1>@qverse-ui/lit-components</h1>
         <p class="subtitle">Vue 3 + Element Plus + Lit Web Components</p>
       </div>
       <el-menu
