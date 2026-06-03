@@ -8,7 +8,7 @@ import { LitElement, PropertyValues } from 'lit'
 import { property } from 'lit/decorators.js'
 import { safeCustomElement } from '../../../utils/define-lit-element.js'
 import { TAG } from './constants.js'
-import { handlePanoramaClick, handelViewModeChange, handelCoreLoaded, syncEnabledFromMode } from './interaction.js'
+import { handlePanoramaClick, handelViewModeChange, handelCoreLoaded, syncEnabledFromMode, handelWaypointStart, handelWaypointComplete } from './interaction.js'
 import { booleanAttr, type PanoramaSwitchOption } from './properties.js'
 import { styles } from './styles.js'
 import { renderPanoramaView } from './template.js'
@@ -74,6 +74,18 @@ export class LitSwitchPanoramaView extends LitElement {
 
   }
 
+  private _onSwitchWaypointStart = () => {
+
+    handelWaypointStart(this);
+
+  }
+
+  private _onSwitchWaypointComplete = () => {
+
+    handelWaypointComplete(this);
+
+  }
+
   /**
    * 渲染模板
    */
@@ -111,6 +123,10 @@ export class LitSwitchPanoramaView extends LitElement {
 
       this.qspace.view.addEventListener('mode.change', this._onViewModeChange);
 
+      this.qspace.model.addEventListener('switch.waypoint.start', this._onSwitchWaypointStart);
+
+      this.qspace.model.addEventListener('switch.waypoint.complete', this._onSwitchWaypointComplete);
+
     }
 
   }
@@ -125,6 +141,10 @@ export class LitSwitchPanoramaView extends LitElement {
       this.qspace.core.removeEventListener('loaded', this._onCoreLoaded);
 
       this.qspace.view.removeEventListener('mode.change', this._onViewModeChange);
+
+      this.qspace.model.removeEventListener('switch.waypoint.start', this._onSwitchWaypointStart);
+
+      this.qspace.model.removeEventListener('switch.waypoint.complete', this._onSwitchWaypointComplete);
 
     }
 

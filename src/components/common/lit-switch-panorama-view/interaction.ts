@@ -62,7 +62,7 @@ export function handlePanoramaClick(host: PanoramaViewHost, e: Event) {
 
   host.setEnabled(false)
 
-  console.log('host.option', host.option);
+  // console.log('host.option', host.option);
 
   turnToPanoramaView(host.qspace, host.option, () => {
 
@@ -81,5 +81,19 @@ export function handelCoreLoaded(host: PanoramaViewHost) {
 export function handelViewModeChange(host: PanoramaViewHost, mode: string) {
 
   syncEnabledFromMode(host, mode)
+
+}
+
+/** 全景点位切换开始：禁用视图切换按钮 */
+export function handelWaypointStart(host: PanoramaViewHost) {
+
+  host.setEnabled(false)
+
+}
+
+/** 全景点位切换完成：按当前 view.mode 恢复 enabled */
+export function handelWaypointComplete(host: PanoramaViewHost) {
+
+  syncEnabledFromMode(host, host.qspace?.view?.mode)
 
 }

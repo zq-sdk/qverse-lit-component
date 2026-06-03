@@ -78,3 +78,17 @@ export function handelViewModeChange(host: FloorplanViewHost, mode: string) {
   syncEnabledFromMode(host, mode)
 
 }
+
+/** 全景点位切换开始：禁用视图切换按钮 */
+export function handelWaypointStart(host: FloorplanViewHost) {
+
+  host.setEnabled(false)
+
+}
+
+/** 全景点位切换完成：按当前 view.mode 恢复 enabled */
+export function handelWaypointComplete(host: FloorplanViewHost) {
+
+  syncEnabledFromMode(host, host.qspace?.view?.mode)
+
+}

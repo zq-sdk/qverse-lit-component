@@ -11,7 +11,7 @@ import { TAG } from './constants.js'
 import { booleanAttr } from './properties.js'
 import { styles } from './styles.js'
 import { renderDollhouseView } from './template.js'
-import { handleDollhouseClick, handelViewModeChange, handelCoreLoaded, syncEnabledFromMode } from './interaction.js'
+import { handleDollhouseClick, handelViewModeChange, handelCoreLoaded, syncEnabledFromMode, handelWaypointStart, handelWaypointComplete } from './interaction.js'
 
 /** 切换到 dollhouse 视图；qspace 须由宿主通过 :qspace 传入 */
 @safeCustomElement(TAG)
@@ -61,6 +61,18 @@ export class LitSwitchDollhouseView extends LitElement {
 
   }
 
+  private _onSwitchWaypointStart = () => {
+
+    handelWaypointStart(this);
+
+  }
+
+  private _onSwitchWaypointComplete = () => {
+
+    handelWaypointComplete(this);
+
+  }
+
   /**
    * 渲染模板
    */
@@ -98,6 +110,10 @@ export class LitSwitchDollhouseView extends LitElement {
 
       this.qspace.view.addEventListener('mode.change', this._onViewModeChange);
 
+      this.qspace.model.addEventListener('switch.waypoint.start', this._onSwitchWaypointStart);
+
+      this.qspace.model.addEventListener('switch.waypoint.complete', this._onSwitchWaypointComplete);
+
     }
 
   }
@@ -112,6 +128,10 @@ export class LitSwitchDollhouseView extends LitElement {
       this.qspace.core.removeEventListener('loaded', this._onCoreLoaded);
 
       this.qspace.view.removeEventListener('mode.change', this._onViewModeChange);
+
+      this.qspace.model.removeEventListener('switch.waypoint.start', this._onSwitchWaypointStart);
+
+      this.qspace.model.removeEventListener('switch.waypoint.complete', this._onSwitchWaypointComplete);
 
     }
 

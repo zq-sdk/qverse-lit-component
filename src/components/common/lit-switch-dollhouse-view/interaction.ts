@@ -67,14 +67,34 @@ export function handleDollhouseClick(host: DollhouseViewHost, e: Event) {
 
 }
 
+/** 核心加载完成：按当前 view.mode 恢复 enabled */
 export function handelCoreLoaded(host: DollhouseViewHost) {
 
   syncEnabledFromMode(host, host.qspace?.view?.mode)
 
 }
 
+/** 视图模式改变：按新模式恢复 enabled */
 export function handelViewModeChange(host: DollhouseViewHost, mode: string) {
 
   syncEnabledFromMode(host, mode)
+
+}
+
+/** 全景点位切换开始：禁用视图切换按钮 */
+export function handelWaypointStart(host: DollhouseViewHost) {
+
+  console.log('handelWaypointStart')
+
+  host.setEnabled(false)
+
+}
+
+/** 全景点位切换完成：按当前 view.mode 恢复 enabled */
+export function handelWaypointComplete(host: DollhouseViewHost) {
+
+  console.log('handelWaypointStart')
+
+  syncEnabledFromMode(host, host.qspace?.view?.mode)
 
 }

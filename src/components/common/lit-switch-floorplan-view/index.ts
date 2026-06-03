@@ -8,7 +8,7 @@ import { LitElement, PropertyValues } from 'lit'
 import { property } from 'lit/decorators.js'
 import { safeCustomElement } from '../../../utils/define-lit-element.js'
 import { TAG } from './constants.js'
-import { handleFloorplanClick, handelViewModeChange, handelCoreLoaded, syncEnabledFromMode } from './interaction.js'
+import { handleFloorplanClick, handelViewModeChange, handelCoreLoaded, syncEnabledFromMode, handelWaypointStart, handelWaypointComplete } from './interaction.js'
 import { booleanAttr } from './properties.js'
 import { styles } from './styles.js'
 import { renderFloorplanView } from './template.js'
@@ -61,6 +61,18 @@ export class LitSwitchFloorplanView extends LitElement {
 
   }
 
+  private _onSwitchWaypointStart = () => {
+
+    handelWaypointStart(this);
+
+  }
+
+  private _onSwitchWaypointComplete = () => {
+
+    handelWaypointComplete(this);
+
+  }
+
   /**
    * 渲染模板
    */
@@ -98,6 +110,10 @@ export class LitSwitchFloorplanView extends LitElement {
 
       this.qspace.view.addEventListener('mode.change', this._onViewModeChange);
 
+      this.qspace.model.addEventListener('switch.waypoint.start', this._onSwitchWaypointStart);
+
+      this.qspace.model.addEventListener('switch.waypoint.complete', this._onSwitchWaypointComplete);
+
     }
 
   }
@@ -112,6 +128,10 @@ export class LitSwitchFloorplanView extends LitElement {
       this.qspace.core.removeEventListener('loaded', this._onCoreLoaded);
 
       this.qspace.view.removeEventListener('mode.change', this._onViewModeChange);
+
+      this.qspace.model.removeEventListener('switch.waypoint.start', this._onSwitchWaypointStart);
+
+      this.qspace.model.removeEventListener('switch.waypoint.complete', this._onSwitchWaypointComplete);
 
     }
 
