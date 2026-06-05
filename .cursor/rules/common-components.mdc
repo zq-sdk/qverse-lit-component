@@ -26,7 +26,7 @@ alwaysApply: false
 
 示例见 `lit-switch-floorplan-view/index.ts`、`lit-switch-dollhouse-view/interaction.ts`。
 
-格式细则（空行、命名、Lit 写法）见 `.cursor/rules/code-style.mdc`。
+格式细则（空行、命名、Lit 写法）见 `.cursor/rules/code-style.mdc`；Agent 写码前另读 `.cursor/rules/agent-pitfalls.mdc`。
 
 ## 目录结构
 

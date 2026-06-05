@@ -6,7 +6,9 @@ alwaysApply: false
 
 # 代码样式与规范
 
-## 空行（重要）
+## 空行（重要 — 生成/修改代码时必须遵守）
+
+> **Agent**：禁止「一行代码一行空行」。违反后文件体积会异常膨胀（例如 260 行变成 500+ 行），且与仓库现有风格不一致。常见失误见 `.cursor/rules/agent-pitfalls.mdc`。
 
 **禁止「一行代码一行空行」**（不得在每个语句、import、字段之间插入空行）。
 
@@ -15,10 +17,10 @@ alwaysApply: false
 | 文件头 `*/` 之后 | **1** 行空行，再写 import |
 | import 块与后续代码 | **1** 行空行 |
 | 相邻 import | **不要**空行分隔 |
+| 多行 `import { ... }` 内 | 每项之间**不要**空行 |
 | 类/接口成员之间 | **1** 行空行（属性、方法块之间） |
 | 方法体 `{` 与 `}` | `{` 后 **1** 行空行；`}` 前 **1** 行空行 |
-| 方法之间 | **1** 行空行 |
-| 连续逻辑语句 | **不要**空行（如 `this.a = x` 与下一行赋值） |
+| 方法体内连续语句 | **不要**空行（如 `this.a = x` 与下一行赋值） |
 | 文件末尾 | 最多 **1** 行尾换行，**不要**连续多个空行 |
 
 ### 正确示例（`index.ts` 片段）
@@ -32,7 +34,7 @@ alwaysApply: false
   }
 ```
 
-### 错误示例
+### 错误示例（禁止 — Agent 曾反复犯此错）
 
 ```ts
   setEnabled(value: boolean) {
@@ -40,13 +42,68 @@ alwaysApply: false
 
     this.enabled = value
 
+
     this.toggleAttribute('enabled', value)
 
 
   }
 ```
 
-参考：`src/components/common/lit-switch-floorplan-view/index.ts`、`interaction.ts`。
+```ts
+import { LitElement } from 'lit'
+
+import { property } from 'lit/decorators.js'   // ❌ import 之间不要空行
+```
+
+**参考（正确风格）**：`src/components/common/lit-switch-dollhouse-view/index.ts`、`interaction.ts`；samples：`samples/src/components/common-demo/SceneExampleDemo.vue`。
+
+**反例（勿模仿）**：曾被错误格式化的 `lit-switch-floor/index.ts`、`*Demo.vue`（若 `<template>` / `<script>` / `<style>` 内每行后都有空行，应按上表修正）。
+
+## Vue 单文件组件（`.vue`）
+
+**禁止在 `<template>`、`<script>`、`<style>` 内「一行代码一行空行」。**
+
+| 区块 | 规则 |
+|------|------|
+| `<template>` | 标签、属性、子节点之间**不要**空行；多属性可换行但**行间无空行** |
+| `<script setup>` | 与 `.ts` 相同：import 连续；类型/常量/函数之间**最多 1 行**分隔逻辑块，函数体内语句**连续** |
+| `<style scoped>` | 选择器之间 **1** 行空行；规则块内属性**连续**，不要每条属性后空行 |
+| 区块之间 | `</template>` 与 `<script>` 之间 **1** 行空行；`</script>` 与 `<style>` 之间 **1** 行空行 |
+
+### 正确示例（`<script setup>` 片段）
+
+```vue
+<script setup lang="ts">
+import { onMounted, ref } from 'vue'
+import { SCENE_BOOT_DATA } from '@/config/scene-boot'
+
+const floorSwitchOption = ref({ floors: [], currentFloor: 'all' as const })
+
+watch(adaptedSceneData, (data) => {
+  if (!data) return
+  floorSwitchOption.value = {
+    ...floorSwitchOption.value,
+    floors: resolveFloorOptionFromAdaptedData(data),
+  }
+})
+</script>
+```
+
+### 错误示例（禁止）
+
+```vue
+<lit-switch-floor
+
+  :qspace="qspaceInstance"
+
+  :option="floorSwitchOption"
+
+/>
+
+const floors = resolveFloorOptionFromAdaptedData(adaptedSceneData)
+
+floorSwitchOption.value = { floors }
+```
 
 ## 文件头
 
@@ -91,6 +148,7 @@ alwaysApply: false
 
 ## 禁止
 
-- 不要 reformat 整个文件为「每行后空一行」
+- 不要 reformat 整个文件为「每行后空一行」（含 `.vue` 的 template / script / style）
 - 不要在 `common/` 根目录增加 shared 基类（各组件目录自包含）
 - 不要为省事复制粘贴后留双倍空行或重复 import
+- 不要用整文件 `Write` 替代小范围 `StrReplace` 除非用户明确要求重写该文件

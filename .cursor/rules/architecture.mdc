@@ -71,6 +71,7 @@ lit-switch-<view>-view/
 ```
 .cursor/rules/
   architecture.mdc           # 仓库总览（alwaysApply）
+  agent-pitfalls.mdc         # Agent 写码常见失误（alwaysApply）
   code-style.mdc             # 空行、命名、TS/Lit 书写（globs: src/**, samples/src/**）
   common-components.mdc      # common 目录结构、文件头、分层（globs: src/components/common/**）
   samples/

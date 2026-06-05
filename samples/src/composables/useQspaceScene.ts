@@ -8,6 +8,7 @@ import { loadAdaptedSceneData } from '@/manager/scan-scene-init.js'
 
 const loadState = ref<'idle' | 'loading' | 'loaded'>('idle')
 const loadProgress = ref(0)
+const adaptedSceneData = ref<unknown>(null)
 
 let sceneStarted = false
 let sceneLoadedOnce = false
@@ -53,6 +54,7 @@ async function startScene() {
     initCoreConfig(qspace)
 
     const adaptedData = await loadAdaptedSceneData(SCENE_BOOT_DATA)
+    adaptedSceneData.value = adaptedData
 
     qspace.core!.initData(adaptedData)
 
@@ -70,6 +72,7 @@ async function startScene() {
   } catch (err) {
     console.error('[samples] 场景启动失败', err)
     sceneStarted = false
+    adaptedSceneData.value = null
     loadState.value = 'idle'
   }
 }
@@ -85,6 +88,7 @@ export function stopQspaceScene() {
   }
   sceneStarted = false
   sceneLoadedOnce = false
+  adaptedSceneData.value = null
   loadState.value = 'idle'
   loadProgress.value = 0
 }
@@ -93,6 +97,7 @@ export function useQspaceScene() {
   return {
     loadState,
     loadProgress,
+    adaptedSceneData,
     startScene,
   }
 }

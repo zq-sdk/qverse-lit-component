@@ -5,37 +5,12 @@
         <h1>@qverse-ui/lit-components</h1>
         <p class="subtitle">Vue 3 + Element Plus + Lit Web Components</p>
       </div>
-      <el-menu
-        mode="horizontal"
-        :ellipsis="false"
-        :default-active="activeMenu"
-        router
-        class="header-menu"
-      >
-        <el-menu-item index="/base">基础组件测试</el-menu-item>
-        <el-menu-item index="/common">通用组件测试</el-menu-item>
-      </el-menu>
     </el-header>
     <el-main class="main">
       <RouterView />
     </el-main>
   </el-container>
 </template>
-
-<script setup lang="ts">
-import { computed } from 'vue'
-import { useRoute } from 'vue-router'
-
-const route = useRoute()
-
-const activeMenu = computed(() => {
-
-  if (route.path.startsWith('/common')) return '/common'
-
-  return '/base'
-
-})
-</script>
 
 <style scoped>
 .layout {
@@ -45,8 +20,6 @@ const activeMenu = computed(() => {
 .header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 1.5rem;
   background: var(--el-color-primary);
   color: #fff;
   padding: 0 1.5rem;
@@ -68,28 +41,9 @@ const activeMenu = computed(() => {
   color: rgba(255, 255, 255, 0.85);
 }
 
-.header-menu {
-  flex: 1;
-  justify-content: flex-end;
-  border-bottom: none;
-  background: transparent;
-}
-
-.header-menu :deep(.el-menu-item) {
-  color: rgba(255, 255, 255, 0.9);
-  border-bottom: 2px solid transparent;
-}
-
-.header-menu :deep(.el-menu-item:hover),
-.header-menu :deep(.el-menu-item.is-active) {
-  color: #fff !important;
-  background: rgba(255, 255, 255, 0.15) !important;
-  border-bottom-color: #fff;
-}
-
 .main {
+  padding: 0;
   background: var(--el-bg-color-page);
-  padding: 1.25rem 1.5rem;
 }
 </style>
 

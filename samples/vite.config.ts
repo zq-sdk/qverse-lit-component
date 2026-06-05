@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { fileURLToPath, URL } from 'node:url'
+import { viteMarkdown } from './src/plugins/vite-markdown'
 
 const samplesRoot = fileURLToPath(new URL('.', import.meta.url))
 const litPkgRoot = fileURLToPath(new URL('..', import.meta.url))
@@ -32,6 +33,7 @@ function watchLitPackageDist() {
 export default defineConfig({
 
   plugins: [
+    viteMarkdown(),
     vue({
       template: {
         compilerOptions: {
@@ -47,6 +49,7 @@ export default defineConfig({
 
     alias: {
       '@': `${samplesRoot}/src`,
+      '@lit-docs': `${litPkgRoot}/docs/common`,
     },
 
   },

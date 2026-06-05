@@ -44,6 +44,33 @@ type LitSwitchViewProps = LitSwitchViewBaseProps & {
 
 }
 
+type LitSwitchFloorOption = {
+
+  floors?: Array<{
+    idx: number
+    name: string
+  }>
+  currentFloor?: number | 'all'
+  allLabel?: string
+
+}
+
+type LitSwitchFloorEventDetail = {
+
+  floor?: number | 'all'
+
+}
+
+type LitSwitchFloorProps = {
+
+  qspace?: unknown
+  option?: LitSwitchFloorOption
+  enabled?: boolean
+  onLitClick?: (e: CustomEvent<LitSwitchFloorEventDetail>) => void
+  onLitSwitchComplete?: (e: CustomEvent<LitSwitchFloorEventDetail>) => void
+
+}
+
 declare module 'vue' {
 
   export interface GlobalComponents {
@@ -52,6 +79,7 @@ declare module 'vue' {
     'lit-switch-panorama-view': DefineComponent<LitSwitchViewProps>
     'lit-switch-dollhouse-view': DefineComponent<LitSwitchViewBaseProps>
     'lit-switch-floorplan-view': DefineComponent<LitSwitchViewBaseProps>
+    'lit-switch-floor': DefineComponent<LitSwitchFloorProps>
 
   }
 

@@ -52,6 +52,13 @@ function onLitClick(e: CustomEvent<{ payload?: { variant?: string } }>) {
 </script>
 
 <style scoped>
+.lit-demo {
+  border: none;
+  border-radius: 0;
+  margin: 0;
+  min-height: auto;
+}
+
 .intro {
   display: block;
   margin-bottom: 1rem;

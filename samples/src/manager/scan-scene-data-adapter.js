@@ -213,7 +213,10 @@ function adapterBuildings(_building) {
     blockidx: block.blockidx,
     type: block.category || 'building',
   }))
-  const floors = (_building.floors ?? []).map((floor) => ({ idx: floor.flooridx }))
+  const floors = (_building.floors ?? []).map((floor) => ({
+    idx: floor.flooridx,
+    name: floor.name || (floor.flooridx >= 0 ? `F${floor.flooridx + 1}` : `B${-floor.flooridx}`),
+  }))
   if (!floors.length) {
 
     floors.push({ idx: 0 })

@@ -1,0 +1,56 @@
+---
+description: Agent 在本仓库写码/改码时的常见失误与禁止项（务必遵守）
+alwaysApply: true
+---
+
+# Agent 常见失误（禁止重复）
+
+修改或生成 `src/**`、`samples/**` 代码前，**先读** `.cursor/rules/code-style.mdc` 的空行规则；写完**自检**是否引入下列问题。
+
+## 1. 多余空行（最高频）
+
+| 错误做法 | 正确做法 |
+|----------|----------|
+| 每个 `import` 之间插空行 | import 块内**连续**，块与后续代码之间仅 **1** 行空行 |
+| 多行 import 的每个符号占一行且行间空行 | 多行 import 仅按 Prettier/项目习惯换行，**行间无空行** |
+| 方法体内每条语句之间空一行 | 方法体 `{` 后 1 空行，语句**连续**，`}` 前 1 空行 |
+| 类成员（每个 `@property`）之间都空两行 | 成员之间 **1** 行空行 |
+| 用 `Write` 整文件重写导致「一行一空行」膨胀 | **优先 `StrReplace` 局部修改**；必须整文件写回时对照 `lit-switch-dollhouse-view/index.ts` |
+| Vue `.vue` 的 template 每个属性后空一行 | 属性连续换行，**行间无空行**；见 `code-style.mdc`「Vue 单文件组件」 |
+
+**自检**：改动的 `.ts` / `.vue` 文件行数不应无故翻倍；若 180 行逻辑写成 360+ 行，几乎一定是空行违规。
+
+## 2. 编辑方式不当
+
+- **禁止**为改几行而对整个组件目录 `Write` 全量覆盖（易带入错误格式、漏改、难 review）。
+- `StrReplace` 若提示「匹配多处」，应**扩大 `old_string` 上下文**或分步替换，不要反复用短片段硬替。
+- 改完打开 diff 看是否只有意图内的 hunks，是否混入整文件 reformat。
+
+## 3. 冗余状态与过度设计
+
+- 已有 `@property qspace` 时，**不要**再维护 `_boundQspace` 等镜像字段；解绑用 `changed.get('qspace')` 的旧引用即可。
+- 不要为简单需求加一层与现有 `interaction.ts` / `logic.ts` 重复的分流。
+- 用户要求「最小改动」时，不要顺手改样式、演示文案、无关组件。
+
+## 4. 生命周期 / 事件绑定
+
+- `connectedCallback` 与 `updated` **不要**对同一 `qspace` 重复 `addEventListener`；`qspace` 变更时先解绑旧实例再绑新实例。
+- 与 `lit-switch-*-view` 对齐：`transitioning` 禁用、`mode.change` 同步 `enabled` 等逻辑勿漏。
+
+## 5. 环境与命令
+
+- Windows PowerShell：**用 `;` 串联命令**，不要写 `cd path && npm run build`（会解析失败）。
+- 未要求时不要 `git commit` / `git push` / 改 `git config`。
+
+## 6. 规范未读就输出
+
+- `src/components/common/**` 须有 `@Author: ncz` 文件头（见 `common-components.mdc`）。
+- 相对 import 带 `.js` 后缀；组件用 `@safeCustomElement(TAG)`。
+- 交互逻辑放 `interaction.ts`，`index.ts` 保持薄。
+
+## 完成前清单
+
+1. 空行是否符合 `code-style.mdc`（对照 `lit-switch-dollhouse-view/index.ts` 或 `SceneExampleDemo.vue`）？
+2. 是否只改了任务相关文件与行？
+3. 事件绑定是否无重复、无泄漏？
+4. 需要时运行 `npm run build`（PowerShell 用 `;`）？

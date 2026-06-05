@@ -55,3 +55,21 @@ export async function loadAdaptedSceneData(bootData) {
   return adapted
 
 }
+
+/** 从 loadAdaptedSceneData 返回值解析楼层 option 列表 */
+export function resolveFloorOptionFromAdaptedData(adaptedData) {
+
+  const rawFloors = adaptedData?.building?.floors ?? []
+
+  if (!Array.isArray(rawFloors) || rawFloors.length === 0) {
+
+    return [{ idx: 0, name: 'F1' }]
+
+  }
+
+  return rawFloors.map((floor) => ({
+    idx: floor.idx,
+    name: floor.name || (floor.idx >= 0 ? `F${floor.idx + 1}` : `B${-floor.idx}`),
+  }))
+
+}

@@ -12,6 +12,7 @@ export const LIT_ALL_TAGS = [
   'lit-switch-panorama-view',
   'lit-switch-dollhouse-view',
   'lit-switch-floorplan-view',
+  'lit-switch-floor',
 ] as const
 
 export function isLitCommonElement(tag: string): boolean {

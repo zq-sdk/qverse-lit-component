@@ -4,12 +4,16 @@
 
 export const SCENE_BOOT_DATA = {
   type: 'model',
-  id: 'b25cf01c_a3v5_b6f9',
-  version: '2023-01-11-17-10-03',
+  // 单层
+  // id: 'b25cf01c_a3v5_b6f9',
+  // version: '2023-01-11-17-10-03',
+  // 多层
+  id: '79b468f0_1BIL_b6f9_IoNvcm',
+  version: '2026-03-26-09-30-35',
   entry_info: {
     // mode: 'panorama',
-    // mode: 'dollhouse',
-    mode: 'floorplan',
+    mode: 'dollhouse',
+    // mode: 'floorplan',
     rotation: null,
     // point: 'location_01',
   },
