@@ -111,4 +111,14 @@ defineProps<{
   border: none;
   border-top: 1px solid var(--el-border-color-lighter);
 }
+
+.markdown-doc :deep(a) {
+  color: var(--el-color-primary);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.markdown-doc :deep(a:hover) {
+  text-decoration: underline;
+}
 </style>

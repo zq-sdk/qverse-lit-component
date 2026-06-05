@@ -12,6 +12,7 @@ import { handlePanoramaClick, handelViewModeChange, handelCoreLoaded, syncEnable
 import { booleanAttr, type PanoramaSwitchOption } from './properties.js'
 import { styles } from './styles.js'
 import { renderPanoramaView } from './template.js'
+import { ViewMode } from '@/enum/view.mode.js'
 
 /** 切换到 panorama 视图；qspace 须由宿主通过 :qspace 传入 */
 @safeCustomElement(TAG)
@@ -100,20 +101,18 @@ export class LitSwitchPanoramaView extends LitElement {
    */
   connectedCallback() {
 
+    console.log(`${ViewMode.Panorama} connectedCallback`)
+
     super.connectedCallback()
 
     if (this.qspace) {
 
       if (this.qspace.view) {
 
-        // 待优化
-        try {
+        // 待优化, 不错判断会报错
+        if (null !== this.qspace.commonEvents.coreEvents.getCurrentMode()) {
 
           syncEnabledFromMode(this, this.qspace.view.mode);
-
-        } catch (error) {
-
-          console.error(error);
 
         }
 
@@ -135,6 +134,8 @@ export class LitSwitchPanoramaView extends LitElement {
    * 组件断开生命周期
    */
   disconnectedCallback() {
+
+    console.log(`${ViewMode.Panorama} disconnectedCallback`)
 
     if (this.qspace) {
 

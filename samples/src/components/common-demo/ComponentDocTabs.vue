@@ -6,8 +6,10 @@
       :label="tab.label"
       :name="tab.name"
     >
-      <MarkdownDoc :html="tab.html" />
-      <p v-if="tab.note" class="doc-tab-note">{{ tab.note }}</p>
+      <div class="doc-tab-body" @click="onDocLinkClick">
+        <MarkdownDoc :html="tab.html" />
+        <p v-if="tab.note" class="doc-tab-note">{{ tab.note }}</p>
+      </div>
     </el-tab-pane>
   </el-tabs>
 </template>
@@ -31,6 +33,52 @@ const props = withDefaults(defineProps<{
 })
 
 const activeTab = ref(props.defaultTab || props.tabs[0]?.name || '')
+
+/** 文档内相对链接 → Tab name（如 business-logic.md 中的 ./api.md） */
+const DOC_LINK_TAB: Record<string, string> = {
+  'api.md': 'api',
+  'business-logic.md': 'business',
+  'interaction-logic.md': 'interaction',
+}
+
+function resolveDocTab(href: string): string | undefined {
+
+  const normalized = href.replace(/^\.\//, '').split('#')[0]?.split('?')[0] ?? ''
+
+  return DOC_LINK_TAB[normalized]
+
+}
+
+function onDocLinkClick(event: MouseEvent) {
+
+  const anchor = (event.target as HTMLElement | null)?.closest('a')
+
+  if (!anchor) {
+
+    return
+
+  }
+
+  const href = anchor.getAttribute('href')
+
+  if (!href || href.startsWith('http://') || href.startsWith('https://') || href.startsWith('mailto:')) {
+
+    return
+
+  }
+
+  const tabName = resolveDocTab(href)
+
+  if (!tabName || !props.tabs.some((tab) => tab.name === tabName)) {
+
+    return
+
+  }
+
+  event.preventDefault()
+  activeTab.value = tabName
+
+}
 
 watch(
   () => props.tabs,

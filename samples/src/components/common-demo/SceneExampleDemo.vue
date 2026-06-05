@@ -3,7 +3,7 @@
 -->
 <template>
   <div class="scene-example-overlay">
-    <div class="overlay-floor">
+    <div v-if="overlayControls?.floorSwitchVisible ?? true" class="overlay-floor">
       <lit-switch-floor
         ref="litSwitchFloorRef"
         :qspace="qspaceInstance"
@@ -15,16 +15,19 @@
 
     <div class="overlay-view">
       <lit-switch-dollhouse-view
+        v-if="overlayControls?.dollhouseVisible ?? true"
         :qspace="qspaceInstance"
         @lit-click="onSwitchDollhouseViewClick"
         @lit-switch-complete="onSwitchDollhouseViewComplete"
       />
       <lit-switch-floorplan-view
+        v-if="overlayControls?.floorplanVisible ?? true"
         :qspace="qspaceInstance"
         @lit-click="onSwitchFloorplanViewClick"
         @lit-switch-complete="onSwitchFloorplanViewComplete"
       />
       <lit-switch-panorama-view
+        v-if="overlayControls?.panoramaVisible ?? true"
         ref="litSwitchPanoramaViewRef"
         :qspace="qspaceInstance"
         :option="panoramaOption"
@@ -38,6 +41,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import type { PanoramaSwitchOption } from '@/composables/useSwitchView'
+import { useSceneExampleOverlay } from '@/composables/useSceneExampleViewSwitch'
 import { useQspaceScene } from '@/composables/useQspaceScene'
 import { resolveFloorOptionFromAdaptedData } from '@/manager/scan-scene-init.js'
 import { resolveQspace } from '@/sdk/resolve-qspace'
@@ -55,6 +59,7 @@ type FloorSwitchOption = {
 
 const qspaceInstance: any = resolveQspace()
 const { adaptedSceneData } = useQspaceScene()
+const overlayControls = useSceneExampleOverlay()
 const panoramaOption = ref<PanoramaSwitchOption>({})
 const floorSwitchOption = ref<FloorSwitchOption>({ floors: [], currentFloor: 'all' })
 const litSwitchPanoramaViewRef = ref<any>(null)

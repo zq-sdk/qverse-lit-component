@@ -121,6 +121,8 @@ export class LitSwitchFloor extends LitElement implements FloorSwitchHost {
 
   connectedCallback() {
 
+    console.log('switch floor comp connected')
+
     super.connectedCallback()
 
     this.toggleAttribute('hidden', true)
@@ -136,6 +138,8 @@ export class LitSwitchFloor extends LitElement implements FloorSwitchHost {
   }
 
   disconnectedCallback() {
+
+    console.log('switch floor comp disconnected')
 
     if (this.qspace) {
 

@@ -93,14 +93,10 @@ export class LitSwitchDollhouseView extends LitElement {
 
       if (this.qspace.view) {
 
-        // 待优化
-        try {
+        // 待优化, 不错判断会报错
+        if(null !== this.qspace.commonEvents.coreEvents.getCurrentMode()) {
 
           syncEnabledFromMode(this, this.qspace.view.mode);
-
-        } catch (error) {
-
-          console.error(error);
 
         }
 
