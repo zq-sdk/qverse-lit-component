@@ -85,12 +85,14 @@ export type FloorSwitchHost = HTMLElement & {
   qspace: any
   option: FloorSwitchOption
   enabled: boolean
+  allFloorEnabled: boolean
   scrollOffset: number
   upActive: boolean
   downActive: boolean
   requestUpdate: () => void
   toggleAttribute: (name: string, force?: boolean) => void
   setEnabled: (value: boolean) => void
+  setAllFloorEnabled: (value: boolean) => void
   onSelectFloor?: (floorIndex: number | 'all', e: Event) => void
   onScrollUp?: () => void
   onScrollDown?: () => void
@@ -100,6 +102,33 @@ export type FloorSwitchHost = HTMLElement & {
 export function setFloorSwitchEnabled(host: FloorSwitchHost, value: boolean): void {
 
   host.setEnabled(value)
+
+}
+
+/** 全景 / 平面视图下禁用「全部」；3D 视图下可点 */
+export function syncAllFloorEnabledFromViewMode(host: FloorSwitchHost, mode?: string): void {
+
+  if (!host.qspace) {
+
+    return
+
+  }
+
+  const resolved = mode ?? getViewMode(host.qspace)
+
+  if (resolved === ViewMode.Transitioning) {
+
+    return
+
+  }
+
+  host.setAllFloorEnabled(resolved === ViewMode.Dollhouse)
+
+}
+
+export function isAllFloorEnabled(host: FloorSwitchHost): boolean {
+
+  return host.allFloorEnabled
 
 }
 
@@ -121,7 +150,39 @@ export function syncEnabledFromViewMode(host: FloorSwitchHost, mode?: string): v
       break
 
     default:
+      setFloorSwitchEnabled(host, false)
       break
+
+  }
+
+}
+
+/** connectedCallback 补跑：core 已 loaded 且当前视图有值时走 handleCoreLoaded，否则保持禁用 */
+export function trySyncIfCoreAlreadyLoaded(host: FloorSwitchHost): void {
+
+  if (!host.qspace) {
+
+    setFloorSwitchEnabled(host, false)
+
+    return
+
+  }
+
+  try {
+
+    if (null !== host.qspace?.commonEvents?.coreEvents?.getCurrentMode?.()) {
+
+      handleCoreLoaded(host)
+
+    } else {
+
+      setFloorSwitchEnabled(host, false)
+
+    }
+
+  } catch {
+
+    setFloorSwitchEnabled(host, false)
 
   }
 
@@ -214,6 +275,7 @@ export function applyPanoramaCurrentFloorFromModel(
   if (isPanoramaViewMode(host.qspace)) {
 
     rememberStableViewMode(host, ViewMode.Panorama)
+    host.setAllFloorEnabled(false)
 
   }
 
@@ -256,17 +318,19 @@ export function applyFloorplanDefaultFloor(
   options?: { force?: boolean },
 ): void {
 
-  const floors = host.option.floors ?? []
+  const resolved = mode ?? getViewMode(host.qspace)
 
-  if (!host.qspace || floors.length === 0) {
+  if (resolved !== ViewMode.Floorplan) {
 
     return
 
   }
 
-  const resolved = mode ?? getViewMode(host.qspace)
+  host.setAllFloorEnabled(false)
 
-  if (resolved !== ViewMode.Floorplan) {
+  const floors = host.option.floors ?? []
+
+  if (!host.qspace || floors.length === 0) {
 
     return
 
@@ -324,9 +388,45 @@ export function handleCoreLoaded(host: FloorSwitchHost): void {
 
   syncEnabledFromViewMode(host, mode)
 
-  applyInitialEntryView(host, mode)
+  syncAllFloorEnabledFromViewMode(host, mode)
+
+  if (mode === ViewMode.Panorama) {
+
+    applyPanoramaCurrentFloorFromModel(host, { force: true })
+
+  } else {
+
+    applyInitialEntryView(host, mode)
+
+  }
 
   host.requestUpdate()
+
+  queueMicrotask(() => {
+
+    if (!host.qspace) {
+
+      return
+
+    }
+
+    syncAllFloorEnabledFromViewMode(host)
+
+    const resolved = getViewMode(host.qspace)
+
+    if (resolved === ViewMode.Panorama) {
+
+      applyPanoramaCurrentFloorFromModel(host, { force: true })
+
+    } else if (resolved === ViewMode.Floorplan) {
+
+      applyFloorplanDefaultFloor(host, ViewMode.Floorplan, { force: true })
+
+    }
+
+    host.requestUpdate()
+
+  })
 
 }
 
@@ -344,6 +444,8 @@ export function handleViewModeChange(host: FloorSwitchHost, mode: string): void 
   }
 
   syncEnabledFromViewMode(host, mode)
+
+  syncAllFloorEnabledFromViewMode(host, mode)
 
   if (mode !== ViewMode.Transitioning) {
 
@@ -465,6 +567,15 @@ export function handleSelectFloor(
 ): void {
 
   if (!host.enabled) {
+
+    e.preventDefault()
+    e.stopPropagation()
+
+    return
+
+  }
+
+  if (floorIndex === 'all' && !isAllFloorEnabled(host)) {
 
     e.preventDefault()
     e.stopPropagation()

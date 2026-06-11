@@ -11,6 +11,7 @@ import {
   getFloorListReverse,
   getTranslateStyle,
   isAllFloorActive,
+  isAllFloorEnabled,
   isFloorActive,
   isFloorSwitchVisible,
   isUpArrowActive,
@@ -35,14 +36,17 @@ export function renderFloorSwitch(host: FloorSwitchHost) {
         ${scrollable ? html`
           <li>
             <div
-              class="scroll-arrow up ${isUpArrowActive(host) ? 'active' : ''}"
+              class="up-arrow ${isUpArrowActive(host) ? 'up-arrow-active' : ''}"
               @click=${() => host.onScrollUp?.()}
             ></div>
           </li>
         ` : nothing}
 
-        <li @click=${(e: Event) => host.onSelectFloor?.('all', e)}>
-          <span class="floor-label ${isAllFloorActive(host) ? 'active' : ''}">
+        <li
+          class="all-floor ${isAllFloorEnabled(host) ? '' : 'disabled'}"
+          @click=${(e: Event) => host.onSelectFloor?.('all', e)}
+        >
+          <span class="floor-label ${isAllFloorActive(host) && isAllFloorEnabled(host) ? 'active' : ''}">
             ${getAllLabel(host)}
           </span>
         </li>
@@ -62,7 +66,7 @@ export function renderFloorSwitch(host: FloorSwitchHost) {
         ${scrollable ? html`
           <li>
             <div
-              class="scroll-arrow down ${host.downActive ? 'active' : ''}"
+              class="down-arrow ${host.downActive ? 'down-arrow-active' : ''}"
               @click=${() => host.onScrollDown?.()}
             ></div>
           </li>

@@ -4,7 +4,8 @@
  * @Description: lit-switch-floor 样式
  */
 
-import { css } from 'lit'
+import { css, unsafeCSS } from 'lit'
+import arrowUrl from './assets/bottom-arrow.png?url'
 
 export const styles = css`
   :host {
@@ -21,25 +22,27 @@ export const styles = css`
   }
 
   :host(:not([enabled])) .floor-list-wrap li,
-  :host(:not([enabled])) .scroll-arrow {
+  :host(:not([enabled])) .up-arrow,
+  :host(:not([enabled])) .down-arrow {
     cursor: not-allowed;
   }
 
   .switch-floor-wrap {
     width: 56px;
-    /* background: rgba(41, 41, 41, 0.77); */
-    background: rgba(255, 0, 0, 0.4);
-    box-shadow: 0 4px 8px 1px rgba(255, 255, 255, 0.1);
+    height: auto;
+    background: rgba(0, 0, 0, 0.4);
+    box-shadow: 0px 4px 8px 1px rgba(255, 255, 255, 0.1);
     border-radius: 29px;
-    padding: 2px 0;
+    padding: 0.13rem 0;
   }
 
   .floor-list-wrap {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    height: 100%;
     width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -52,18 +55,37 @@ export const styles = css`
     width: 56px;
   }
 
+  .floor-list-wrap li.all-floor.disabled {
+    pointer-events: none;
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  .floor-list-wrap li.all-floor.disabled .floor-label {
+    cursor: not-allowed;
+    color: rgba(255, 255, 255, 0.3);
+  }
+
+  .floor-list-wrap li.all-floor.disabled .floor-label.active {
+    color: rgba(255, 255, 255, 0.3);
+  }
+
   .floor-label {
     display: block;
     margin: 0 auto;
-    width: 80%;
-    font-size: 14px;
-    font-weight: bold;
-    line-height: 22px;
     text-align: center;
+    font-size: 14px;
+    width: 80%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    font-family:
+      PingFang SC-Bold,
+      PingFang SC,
+      sans-serif;
+    font-weight: bold;
     color: rgba(255, 255, 255, 0.3);
+    line-height: 22px;
   }
 
   .floor-label.active {
@@ -78,6 +100,7 @@ export const styles = css`
   .translate {
     display: flex;
     flex-direction: column;
+    position: relative;
     transition: transform 0.3s;
   }
 
@@ -85,25 +108,25 @@ export const styles = css`
     height: 22px;
   }
 
-  .scroll-arrow {
-    width: 0;
-    height: 0;
-    margin: 0 auto;
-    border-left: 6px solid transparent;
-    border-right: 6px solid transparent;
+  .up-arrow,
+  .down-arrow {
+    width: 20px;
+    height: 20px;
+    background-image: url(${unsafeCSS(arrowUrl)});
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
     opacity: 0.7;
+    margin: 0 auto;
     cursor: pointer;
   }
 
-  .scroll-arrow.up {
-    border-bottom: 8px solid rgba(255, 255, 255, 0.7);
+  .up-arrow {
+    transform: rotate(180deg);
   }
 
-  .scroll-arrow.down {
-    border-top: 8px solid rgba(255, 255, 255, 0.7);
-  }
-
-  .scroll-arrow.active {
+  .up-arrow-active,
+  .down-arrow-active {
     opacity: 1;
   }
 `

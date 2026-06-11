@@ -23,7 +23,7 @@ export const styles = css`
   }
 
   .mode-item.panorama {
-    background-color: rgba(255, 0, 0, 0.4);
+    background-color: rgba(0, 0, 0, 0);
     background-image: var(--lit-mode-panorama-icon, url(${unsafeCSS(iconUrl)}));
   }
 

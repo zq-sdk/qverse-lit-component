@@ -16,7 +16,9 @@ import {
   handleViewModeChange,
   handleWaypointComplete,
   handleWaypointStart,
+  syncAllFloorEnabledFromViewMode,
   syncVisibility,
+  trySyncIfCoreAlreadyLoaded,
   type FloorSwitchHost,
 } from './interaction.js'
 import type { FloorSwitchOption } from './properties.js'
@@ -50,7 +52,10 @@ export class LitSwitchFloor extends LitElement implements FloorSwitchHost {
     reflect: true,
     converter: booleanAttr,
   })
-  enabled = true
+  enabled = false
+
+  @state()
+  allFloorEnabled = true
 
   @state()
   scrollOffset = 0
@@ -68,6 +73,18 @@ export class LitSwitchFloor extends LitElement implements FloorSwitchHost {
     this.enabled = value
 
     this.toggleAttribute('enabled', value)
+
+  }
+
+  setAllFloorEnabled(value: boolean) {
+
+    if (this.allFloorEnabled === value) {
+
+      return
+
+    }
+
+    this.allFloorEnabled = value
 
   }
 
@@ -125,6 +142,8 @@ export class LitSwitchFloor extends LitElement implements FloorSwitchHost {
 
     super.connectedCallback()
 
+    this.setEnabled(false)
+
     this.toggleAttribute('hidden', true)
 
     syncVisibility(this)
@@ -157,6 +176,8 @@ export class LitSwitchFloor extends LitElement implements FloorSwitchHost {
 
       syncVisibility(this)
 
+      syncAllFloorEnabledFromViewMode(this)
+
     }
 
   }
@@ -171,26 +192,7 @@ export class LitSwitchFloor extends LitElement implements FloorSwitchHost {
 
     this.qspace.model?.addEventListener?.('switch.waypoint.complete', this._onSwitchWaypointComplete)
 
-    this._syncIfCoreAlreadyLoaded()
-
-  }
-
-  /** core 已 loaded 时组件才挂载，补跑 core.loaded 逻辑 */
-  private _syncIfCoreAlreadyLoaded() {
-
-    try {
-
-      if (this.qspace?.view?.mode) {
-
-        handleCoreLoaded(this)
-
-      }
-
-    } catch {
-
-      // qspace 未就绪时忽略
-
-    }
+    trySyncIfCoreAlreadyLoaded(this)
 
   }
 

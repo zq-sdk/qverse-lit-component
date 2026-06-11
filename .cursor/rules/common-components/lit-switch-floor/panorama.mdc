@@ -1,0 +1,9 @@
+---
+globs: ["src\components\common\lit-switch-floor"]
+description: 楼层切换组件（lit-switch-floor）全景视图下的交互规则
+alwaysApply: true
+---
+
+# 禁用规则
+- "全部(all)" 按钮禁用
+- 视图过渡模式下，所有按钮禁用

@@ -23,7 +23,7 @@ export const styles = css`
   }
 
   .mode-item.floorplan {
-    background-color: rgba(255, 0, 0, 0.4);
+    background-color: rgba(0, 0, 0, 0);
     background-image: var(--lit-mode-floorplan-icon, url(${unsafeCSS(iconUrl)}));
   }
 

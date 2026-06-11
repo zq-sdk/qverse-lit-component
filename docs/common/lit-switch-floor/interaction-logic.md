@@ -1,11 +1,22 @@
 # lit-switch-floor · 交互逻辑
 
+## 初始 enabled（组件挂载）
+
+组件初始态下，**整组楼层切换按钮均为禁用**（`enabled = false`）。
+
+启用时机（满足其一即可）：
+
+1. **`core.loaded`** — 核心加载完成后，按当前 `view.mode` 同步 `enabled` 与「全部」可用性。
+2. **`connectedCallback` 补跑** — 挂载时若 `getCurrentMode()` 已有值（core 已 loaded、当前视图不为空），立即执行与 `core.loaded` 相同的同步逻辑。
+
 ## enabled 状态
 | `view.mode` | `enabled` |
 |-------------|-----------|
 | `panorama` / `dollhouse` / `floorplan` | `true` |
-| `transitioning` | `false` |
-| 点位切换进行中 | `false` |
+| `transitioning` | `false`（整组件） |
+| 点位切换进行中 | `false`（整组件） |
+| 全景 / 平面视图下「全部」 | `false`（仅「全部」项，具体楼层仍可点） |
+| 3D 视图下「全部」 | `true` |
 
 ## lit-switch-complete 派发规则
 
@@ -22,7 +33,8 @@
 
 场景 `core.loaded` 后（含组件晚挂载补跑）：
 
-- 若当前为**平面视图**（`floorplan`），默认选中**第一层**（`floors` 中 idx 最小项），并同步 SDK 楼层透明度与启用状态
+- 若当前为**平面视图**（`floorplan`），默认选中**第一层**（`floors` 中 idx 最小项），并同步 SDK 楼层透明度与启用状态；**禁用「全部」按钮**
+- 若当前为**全景视图**（`panorama`），**禁用「全部」按钮**
 - 其他视图不做首入默认层处理
 
 > 不派发 `lit-switch-complete`。
@@ -39,6 +51,7 @@
 
 1. 默认选中**第一层**（`floors` 中 idx 最小项，通常为 F1）
 2. 同步 SDK 楼层透明度与启用状态
+3. **禁用「全部」按钮**（不可点击）
 
 触发时机：`view.mode.change` → `floorplan`；过渡结束后 `queueMicrotask` 二次同步。
 
@@ -46,8 +59,9 @@
 
 1. **强制**从 SDK 同步当前楼层（忽略其他视图遗留的 `option.currentFloor`）
 2. 优先按当前全景点位所在楼层高亮；无法解析时使用 SDK 当前楼层
+3. **禁用「全部」按钮**（不可点击）
 
-触发时机：`view.mode.change` → `panorama`。
+触发时机：`view.mode.change` → `panorama`；`core.loaded` 时当前已是全景视图亦同。
 
 > 切到平面时，若宿主在**当前平面视图下**显式传入 `option.currentFloor` 为具体 idx（非 `'all'`），视图切换默认选中时不覆盖。
 
@@ -81,6 +95,7 @@
 
 ### 全景视图下点击切换楼层
 
+- **「全部」按钮禁用**，不可点击
 - 调用 SDK 切换全景楼层（点位切换）
 - 切换完成前 `enabled=false`
 - 仅点击具体楼层时，`switch.waypoint.complete` 后派发 `lit-switch-complete`
@@ -92,7 +107,8 @@
 
 ### 平面视图下点击切换楼层
 
-- 选中层**启用**且**不透明**，其余楼层**禁用**并**半透明**；选「全部」时恢复全部楼层启用且不透明
+- **「全部」按钮禁用**，不可点击
+- 选中层**启用**且**不透明**，其余楼层**禁用**并**半透明**
 - 仅点击具体楼层时，完成后立即派发 `lit-switch-complete`
 
 ## 滚动

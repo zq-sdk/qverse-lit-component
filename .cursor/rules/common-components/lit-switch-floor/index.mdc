@@ -1,0 +1,5 @@
+---
+globs: ["src\components\common\lit-switch-floor"]
+description: 楼层切换组件（lit-switch-floor）交互规则概览
+alwaysApply: true
+---
