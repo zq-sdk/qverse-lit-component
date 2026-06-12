@@ -36,11 +36,11 @@ export class LitSwitchFloor extends LitElement implements FloorSwitchHost {
 
   /** qspace SDK 实例；可选，用于按视图模式调用 SDK */
   @property({ attribute: false })
-  qspace: any = null
+  public qspace: any = null
 
   /** 楼层配置；Vue: :option="{ floors: [{ idx, name }], currentFloor, allLabel }" */
   @property({ attribute: false })
-  option: FloorSwitchOption = { currentFloor: 'all' }
+  public option: FloorSwitchOption = { currentFloor: 'all' }
 
   /**
    * 是否可点击；视图过渡（transitioning）、全景楼层/点位切换进行中为 false
@@ -52,23 +52,27 @@ export class LitSwitchFloor extends LitElement implements FloorSwitchHost {
     reflect: true,
     converter: booleanAttr,
   })
-  enabled = false
+  public enabled = false
 
   @state()
-  allFloorEnabled = true
+  public allFloorEnabled = true
 
   @state()
-  scrollOffset = 0
+  public scrollOffset = 0
 
   @state()
-  upActive = false
+  public upActive = false
 
   @state()
-  downActive = false
+  public downActive = false
 
-  static styles = styles
+  public static styles = styles
 
-  setEnabled(value: boolean) {
+  /**
+   * 设置是否可点击
+   * @param value 是否可点击
+   */
+  public setEnabled(value: boolean) {
 
     this.enabled = value
 
@@ -76,7 +80,11 @@ export class LitSwitchFloor extends LitElement implements FloorSwitchHost {
 
   }
 
-  setAllFloorEnabled(value: boolean) {
+  /**
+   * 设置是否可点击
+   * @param value 是否可点击
+   */
+  public setAllFloorEnabled(value: boolean) {
 
     if (this.allFloorEnabled === value) {
 
@@ -88,19 +96,30 @@ export class LitSwitchFloor extends LitElement implements FloorSwitchHost {
 
   }
 
-  onSelectFloor = (floorIndex: number | 'all', e: Event) => {
+  /**
+   * 选择楼层
+   * @param floorIndex 楼层索引
+   * @param e 事件
+   */
+  public onSelectFloor = (floorIndex: number | 'all', e: Event) => {
 
     handleSelectFloor(this, floorIndex, e)
 
   }
 
-  onScrollUp = () => {
+  /**
+   * 向上滚动
+   */
+  public onScrollUp = () => {
 
     handleScrollUp(this)
 
   }
 
-  onScrollDown = () => {
+  /**
+   * 向下滚动
+   */
+  public onScrollDown = () => {
 
     handleScrollDown(this)
 

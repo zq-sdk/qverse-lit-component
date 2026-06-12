@@ -101,14 +101,19 @@ const LIT_MAP = {
 }
 
 function getByPath(obj, path) {
+
   return path.split('.').reduce((o, k) => o?.[k], obj)
+
 }
 
 function generateElementPlusCss(tokens) {
+
   const lines = Object.entries(EP_MAP).map(([path, cssVar]) => {
+
     const value = getByPath(tokens, path)
     if (value == null) throw new Error(`Missing token: ${path}`)
     return `  ${cssVar}: ${value};`
+
   })
   return `/* AUTO-GENERATED from theme/tokens.json — do not edit */
 /* Run: npm run generate-theme (in Qverse-Lit-Component) */
@@ -126,13 +131,17 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 `
+
 }
 
 function generateLitTokens(tokens) {
+
   const hostVars = Object.entries(LIT_MAP)
     .map(([litVar, { el, path }]) => {
+
       const fallback = getByPath(tokens, path)
       return `    ${litVar}: var(${el}, ${fallback});`
+
     })
     .join('\n')
 
@@ -152,9 +161,11 @@ ${hostVars}
   }
 \`
 `
+
 }
 
 function main() {
+
   const tokens = JSON.parse(readFileSync(tokensPath, 'utf8'))
   mkdirSync(dirname(outCss), { recursive: true })
   mkdirSync(dirname(outLit), { recursive: true })
@@ -164,6 +175,7 @@ function main() {
 
   console.log('[generate-theme] wrote', outCss)
   console.log('[generate-theme] wrote', outLit)
+
 }
 
 main()

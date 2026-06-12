@@ -23,7 +23,7 @@ export class LitSwitchPanoramaView extends LitElement {
     type: Object,
     attribute: false
   })
-  qspace: any = null
+  public qspace: any = null
 
   /**
    * 是否可点击；由 core.loaded / mode.change 自动同步，宿主亦可覆盖
@@ -35,7 +35,7 @@ export class LitSwitchPanoramaView extends LitElement {
     reflect: true, // 反射属性到 HTML attribute
     converter: booleanAttr, // 布尔属性转换器
   })
-  enabled = false
+  public enabled = false
 
   /**
    * 切换全景视图参数；仅 JS 属性绑定
@@ -45,9 +45,9 @@ export class LitSwitchPanoramaView extends LitElement {
     type: Object,
     attribute: false
   })
-  option: PanoramaSwitchOption = {}
+  public option: PanoramaSwitchOption = {}
 
-  setEnabled(value: boolean) {
+  public setEnabled(value: boolean) {
 
     this.enabled = value
 
@@ -55,7 +55,7 @@ export class LitSwitchPanoramaView extends LitElement {
 
   }
 
-  static styles = styles
+  public static styles = styles
 
   private _onClick = (e: Event) => {
 
@@ -65,25 +65,25 @@ export class LitSwitchPanoramaView extends LitElement {
 
   private _onCoreLoaded = () => {
 
-    handelCoreLoaded(this);
+    handelCoreLoaded(this)
 
   }
 
   private _onViewModeChange = (mode: string) => {
 
-    handelViewModeChange(this, mode);
+    handelViewModeChange(this, mode)
 
   }
 
   private _onSwitchWaypointStart = () => {
 
-    handelWaypointStart(this);
+    handelWaypointStart(this)
 
   }
 
   private _onSwitchWaypointComplete = () => {
 
-    handelWaypointComplete(this);
+    handelWaypointComplete(this)
 
   }
 
@@ -112,19 +112,19 @@ export class LitSwitchPanoramaView extends LitElement {
         // 待优化, 不错判断会报错
         if (null !== this.qspace.commonEvents.coreEvents.getCurrentMode()) {
 
-          syncEnabledFromMode(this, this.qspace.view.mode);
+          syncEnabledFromMode(this, this.qspace.view.mode)
 
         }
 
       }
 
-      this.qspace.core.addEventListener('loaded', this._onCoreLoaded);
+      this.qspace.core.addEventListener('loaded', this._onCoreLoaded)
 
-      this.qspace.view.addEventListener('mode.change', this._onViewModeChange);
+      this.qspace.view.addEventListener('mode.change', this._onViewModeChange)
 
-      this.qspace.model.addEventListener('switch.waypoint.start', this._onSwitchWaypointStart);
+      this.qspace.model.addEventListener('switch.waypoint.start', this._onSwitchWaypointStart)
 
-      this.qspace.model.addEventListener('switch.waypoint.complete', this._onSwitchWaypointComplete);
+      this.qspace.model.addEventListener('switch.waypoint.complete', this._onSwitchWaypointComplete)
 
     }
 
@@ -139,13 +139,13 @@ export class LitSwitchPanoramaView extends LitElement {
 
     if (this.qspace) {
 
-      this.qspace.core.removeEventListener('loaded', this._onCoreLoaded);
+      this.qspace.core.removeEventListener('loaded', this._onCoreLoaded)
 
-      this.qspace.view.removeEventListener('mode.change', this._onViewModeChange);
+      this.qspace.view.removeEventListener('mode.change', this._onViewModeChange)
 
-      this.qspace.model.removeEventListener('switch.waypoint.start', this._onSwitchWaypointStart);
+      this.qspace.model.removeEventListener('switch.waypoint.start', this._onSwitchWaypointStart)
 
-      this.qspace.model.removeEventListener('switch.waypoint.complete', this._onSwitchWaypointComplete);
+      this.qspace.model.removeEventListener('switch.waypoint.complete', this._onSwitchWaypointComplete)
 
     }
 

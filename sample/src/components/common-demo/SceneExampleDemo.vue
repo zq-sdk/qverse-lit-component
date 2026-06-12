@@ -68,14 +68,18 @@ const litSwitchFloorRef = ref<any>(null)
 ;(window as any).litSwitchFloorRef = litSwitchFloorRef // 控制台测试用
 
 watch(adaptedSceneData, (data) => {
+
   if (!data) {
+
     return
+
   }
   floorSwitchOption.value = {
     ...floorSwitchOption.value,
     floors: resolveFloorOptionFromAdaptedData(data),
     // allLabel: 'xxx',
   }
+
 }, { immediate: true })
 
 function onSwitchDollhouseViewClick(_e: CustomEvent) {
@@ -87,7 +91,9 @@ function onSwitchFloorplanViewClick(_e: CustomEvent) {
 }
 
 function onSwitchPanoramaViewClick(_e: CustomEvent) {
+
   if (litSwitchPanoramaViewRef.value?.option) {
+
     litSwitchPanoramaViewRef.value.option.locationId = 'location_10'
     litSwitchPanoramaViewRef.value.option.quaternion = {
       x: -0.0009091443452219972,
@@ -95,7 +101,9 @@ function onSwitchPanoramaViewClick(_e: CustomEvent) {
       z: -0.0009324420121733712,
       w: 0.6981048125267894,
     }
+
   }
+
 }
 
 function onSwitchPanoramaViewComplete(_e: CustomEvent) {

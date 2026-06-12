@@ -1,0 +1,4 @@
+﻿
+> @qverse-ui/lit-components@1.0.11 lint
+> eslint src sample/src scripts vite.config.ts sample/vite.config.ts eslint.config.js json
+

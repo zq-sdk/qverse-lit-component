@@ -12,7 +12,7 @@ export function turnToPanoramaView(
   complete: () => void,
 ) {
 
-  const locationId = option?.locationId;
+  const locationId = option?.locationId
 
   const params: Record<string, unknown> = {
     location_id: locationId,

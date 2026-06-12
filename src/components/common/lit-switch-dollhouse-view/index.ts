@@ -19,7 +19,7 @@ export class LitSwitchDollhouseView extends LitElement {
 
   /** qspace SDK 实例；仅 JS 属性绑定，不映射 HTML attribute（对象无法序列化） */
   @property({ attribute: false })
-  qspace: any = null
+  public qspace: any = null
 
   /**
    * 是否可点击；由 core.loaded / mode.change 自动同步，宿主亦可覆盖
@@ -31,9 +31,13 @@ export class LitSwitchDollhouseView extends LitElement {
     reflect: true,
     converter: booleanAttr,
   })
-  enabled = false
+  public enabled = false
 
-  setEnabled(value: boolean) {
+  /**
+   * 设置是否可点击
+   * @param value 是否可点击
+   */
+  public setEnabled(value: boolean) {
 
     this.enabled = value
 
@@ -41,35 +45,55 @@ export class LitSwitchDollhouseView extends LitElement {
 
   }
 
-  static styles = styles
+  /**
+   * 样式
+   */
+  public static styles = styles
 
-  private _onClick = (e: Event) => {
+  /**
+   * 点击事件
+   * @param e 事件
+   */
+  public _onClick = (e: Event) => {
 
     handleDollhouseClick(this, e)
 
   }
 
+  /**
+   * core 加载事件
+   */
   private _onCoreLoaded = () => {
 
-    handelCoreLoaded(this);
+    handelCoreLoaded(this)
 
   }
 
+  /**
+   * view 模式改变事件
+   * @param mode 模式
+   */
   private _onViewModeChange = (mode: string) => {
 
-    handelViewModeChange(this, mode);
+    handelViewModeChange(this, mode)
 
   }
 
+  /**
+   * 切换起点事件
+   */
   private _onSwitchWaypointStart = () => {
 
-    handelWaypointStart(this);
+    handelWaypointStart(this)
 
   }
 
+  /**
+   * 切换终点事件
+   */
   private _onSwitchWaypointComplete = () => {
 
-    handelWaypointComplete(this);
+    handelWaypointComplete(this)
 
   }
 
@@ -94,21 +118,21 @@ export class LitSwitchDollhouseView extends LitElement {
       if (this.qspace.view) {
 
         // 待优化, 不错判断会报错
-        if(null !== this.qspace.commonEvents.coreEvents.getCurrentMode()) {
+        if (null !== this.qspace.commonEvents.coreEvents.getCurrentMode()) {
 
-          syncEnabledFromMode(this, this.qspace.view.mode);
+          syncEnabledFromMode(this, this.qspace.view.mode)
 
         }
 
       }
 
-      this.qspace.core.addEventListener('loaded', this._onCoreLoaded);
+      this.qspace.core.addEventListener('loaded', this._onCoreLoaded)
 
-      this.qspace.view.addEventListener('mode.change', this._onViewModeChange);
+      this.qspace.view.addEventListener('mode.change', this._onViewModeChange)
 
-      this.qspace.model.addEventListener('switch.waypoint.start', this._onSwitchWaypointStart);
+      this.qspace.model.addEventListener('switch.waypoint.start', this._onSwitchWaypointStart)
 
-      this.qspace.model.addEventListener('switch.waypoint.complete', this._onSwitchWaypointComplete);
+      this.qspace.model.addEventListener('switch.waypoint.complete', this._onSwitchWaypointComplete)
 
     }
 
@@ -121,13 +145,13 @@ export class LitSwitchDollhouseView extends LitElement {
 
     if (this.qspace) {
 
-      this.qspace.core.removeEventListener('loaded', this._onCoreLoaded);
+      this.qspace.core.removeEventListener('loaded', this._onCoreLoaded)
 
-      this.qspace.view.removeEventListener('mode.change', this._onViewModeChange);
+      this.qspace.view.removeEventListener('mode.change', this._onViewModeChange)
 
-      this.qspace.model.removeEventListener('switch.waypoint.start', this._onSwitchWaypointStart);
+      this.qspace.model.removeEventListener('switch.waypoint.start', this._onSwitchWaypointStart)
 
-      this.qspace.model.removeEventListener('switch.waypoint.complete', this._onSwitchWaypointComplete);
+      this.qspace.model.removeEventListener('switch.waypoint.complete', this._onSwitchWaypointComplete)
 
     }
 
@@ -162,6 +186,9 @@ export class LitSwitchDollhouseView extends LitElement {
 
 }
 
+/**
+ * 全局声明
+ */
 declare global {
 
   interface HTMLElementTagNameMap {

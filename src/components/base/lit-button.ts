@@ -8,19 +8,20 @@ export type LitButtonSize = 'small' | 'medium' | 'large'
 
 @safeCustomElement('lit-button')
 export class LitButton extends LitElement {
-  @property({ type: String, reflect: true })
-  variant: LitButtonVariant = 'default'
 
   @property({ type: String, reflect: true })
-  size: LitButtonSize = 'medium'
+  public variant: LitButtonVariant = 'default'
+
+  @property({ type: String, reflect: true })
+  public size: LitButtonSize = 'medium'
 
   @property({ type: Boolean, reflect: true })
-  disabled = false
+  public disabled = false
 
   @property({ type: Boolean, reflect: true })
-  block = false
+  public block = false
 
-  static styles = [
+  public static styles = [
     designTokens,
     css`
       :host {
@@ -153,7 +154,9 @@ export class LitButton extends LitElement {
         <slot></slot>
       </button>
     `
+
   }
+
 }
 
 declare global {

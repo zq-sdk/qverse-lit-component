@@ -44,25 +44,36 @@ const route = useRoute()
 const defaultOpeneds = ['base', 'common', 'common-scene']
 
 const activePath = computed(() => {
+
   if (route.path.startsWith('/common/scene/example')) {
+
     return '/common/scene/example'
+
   }
   if (route.path.startsWith('/common/scene/floor-switch')) {
+
     return '/common/scene/floor-switch'
+
   }
   if (route.path.startsWith('/common/scene/switch-view')) {
+
     return '/common/scene/switch-view'
+
   }
   if (route.path.startsWith('/base')) {
+
     return '/base'
+
   }
   return route.path
+
 })
 </script>
 
 <style scoped>
 .home-layout {
-  min-height: calc(100vh - 64px);
+  flex: 1;
+  min-height: 0;
   align-items: stretch;
 }
 
@@ -77,7 +88,12 @@ const activePath = computed(() => {
 }
 
 .home-main {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
   padding: 1.25rem 1.5rem;
+  overflow: auto;
   background: var(--el-bg-color-page);
 }
 </style>

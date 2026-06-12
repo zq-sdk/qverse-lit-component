@@ -378,6 +378,7 @@ function adapterRenderSet(options) {
       console.error(`${FAILURE_MSG}, reason: invalid tile_render_config.set`)
       renderMode = 'lod'
       renderSet = '2048-512'
+
     } else {
 
       renderMode = '6cube'

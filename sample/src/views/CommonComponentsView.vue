@@ -62,6 +62,8 @@ const sceneModelLabel = computed(
 
 <style scoped>
 .common-scene {
+  flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
 }
@@ -69,9 +71,9 @@ const sceneModelLabel = computed(
 .scene-stage {
   display: flex;
   flex-direction: column;
-  width: 100%;
-  height: min(52vh, 520px);
+  flex: 1;
   min-height: 320px;
+  width: 100%;
   overflow: hidden;
   border-radius: var(--el-border-radius-base);
   background-image: linear-gradient(180deg, #1c1c1c 5%, #474a59 54%, #5e6272 75%);

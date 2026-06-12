@@ -1,0 +1,5 @@
+# 1. 先检查暂存区的文件（lint-staged）
+npx lint-staged
+
+# 2. 再检查所有文件（全量检查）
+npm run lint

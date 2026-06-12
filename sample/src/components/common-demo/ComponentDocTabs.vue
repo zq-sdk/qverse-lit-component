@@ -83,9 +83,13 @@ function onDocLinkClick(event: MouseEvent) {
 watch(
   () => props.tabs,
   (tabs) => {
+
     if (!tabs.some((tab) => tab.name === activeTab.value)) {
+
       activeTab.value = props.defaultTab || tabs[0]?.name || ''
+
     }
+
   },
   { deep: true },
 )

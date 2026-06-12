@@ -3,11 +3,17 @@
  */
 
 export function isObj(data, cmd) {
+
   if (Object.prototype.toString.call(data) === '[object Object]') {
+
     return true
+
   }
   if (cmd) {
+
     console.error(`${cmd} is not object`)
+
   }
   return false
+
 }

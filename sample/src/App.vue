@@ -14,6 +14,7 @@
 
 <style scoped>
 .layout {
+  height: 100%;
   min-height: 100vh;
 }
 
@@ -42,7 +43,12 @@
 }
 
 .main {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
   padding: 0;
+  overflow: auto;
   background: var(--el-bg-color-page);
 }
 </style>

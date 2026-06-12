@@ -22,12 +22,21 @@ import { attachRendererStage, detachRendererStage } from '@/utils/renderer-stage
 const { loadState, loadProgress, startScene } = useQspaceScene()
 const qspaceInstance: any = resolveQspace()
 const rendererWrapRef = ref<HTMLElement | null>(null)
+let resizeObserver: ResizeObserver | null = null
+
+function resizeRenderer() {
+
+  qspaceInstance?.core?.resize?.()
+  window.dispatchEvent(new Event('resize'))
+
+}
 
 function onCoreLoaded() {
 
   console.log('onCoreLoaded')
 
-  dealtCoreLoaded();
+  dealtCoreLoaded()
+  resizeRenderer()
 
 }
 
@@ -36,25 +45,34 @@ function dealtCoreLoaded() {
   qspaceInstance.dollhouseCamera.setZoomLimit({
     min: 1,
     max: 4
-  });
+  })
 
-  qspaceInstance.dollhouseCamera.enableZoomControl();
+  qspaceInstance.dollhouseCamera.enableZoomControl()
 
   qspaceInstance.floorplanCamera.setZoomLimit({
     min: 1,
     max: 4
-  });
+  })
 
-  qspaceInstance.floorplanCamera.enableZoomControl();
+  qspaceInstance.floorplanCamera.enableZoomControl()
 
-  qspaceInstance.floorplanCamera.enablePanControl();
+  qspaceInstance.floorplanCamera.enablePanControl()
 
 }
 
 onMounted(() => {
 
   if (rendererWrapRef.value) {
+
     attachRendererStage(rendererWrapRef.value)
+
+    resizeObserver = new ResizeObserver(() => {
+
+      resizeRenderer()
+
+    })
+    resizeObserver.observe(rendererWrapRef.value)
+
   }
 
   startScene()
@@ -65,6 +83,9 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
 
+  resizeObserver?.disconnect()
+  resizeObserver = null
+
   qspaceInstance?.core?.removeEventListener?.('loaded', onCoreLoaded)
 
   detachRendererStage()
@@ -74,6 +95,7 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .renderer-wrap {
+  position: relative;
   width: 100%;
   height: 100%;
 }
